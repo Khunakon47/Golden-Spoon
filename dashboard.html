@@ -1,0 +1,1975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Golden Spoon</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #2c3e50; 
+            line-height: 1.6;
+            min-height: 100vh;
+            font-size: 16px;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(145deg, #2c3e50, #34495e);
+            padding: 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 30px 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .sidebar-logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: white;
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.3);
+        }
+
+        .sidebar h2 {
+            color: #ecf0f1;
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .sidebar-subtitle {
+            color: #bdc3c7;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .sidebar-nav {
+            padding: 20px 0;
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            padding: 18px 25px;
+            margin: 8px 15px;
+            color: #ecf0f1;
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 15px;
+        }
+
+        .sidebar a i {
+            margin-right: 15px;
+            font-size: 18px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar a:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+            color: #ff6b35;
+        }
+
+        .sidebar .active {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            padding: 40px 50px;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .dashboard-header {
+            background: white;
+            padding: 35px 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 107, 53, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-title {
+            color: #2c3e50;
+            font-size: 36px;
+            font-weight: 700;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .page-title i {
+            color: #ff6b35;
+        }
+
+        .header-info {
+            text-align: right;
+        }
+
+        .header-date {
+            color: #6c757d;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f1f3f4;
+            margin-bottom: 30px;
+        }
+
+        .stats-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 4px;
+        }
+
+        .stats-subtitle {
+            font-size: 13px;
+            color: #7f8c8d;
+        }
+
+        .stats-filter {
+            padding: 8px 12px;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            font-size: 13px;
+            background: white;
+            cursor: pointer;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .stat-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #7f8c8d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-icon {
+            font-size: 18px;
+            padding: 8px;
+            border-radius: 8px;
+            color: white;
+        }
+        .stat-icon.orders { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .stat-icon.revenue { background: linear-gradient(135deg, #27ae60, #229954); }
+        .stat-icon.time { background: linear-gradient(135deg, #f39c12, #e67e22); }
+        .stat-icon.customers { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .stat-change {
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .stat-change.positive { color: #27ae60; }
+        .stat-change.negative { color: #ef4444; }
+
+        /* Charts Section */
+        .charts-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .chart-container {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f1f3f4;
+            min-width: 0;       /* ป้องกัน item ดันเกินพื้นที่ */
+        }
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .chart-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        .chart-subtitle {
+            font-size: 13px;
+            color: #7f8c8d;
+            margin-top: 2px;
+        }
+        .chart-content {
+            height: 300px;
+            position: relative;
+        }
+
+        /* Tables Section */
+        .tables-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .table-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f1f3f4;
+            overflow: hidden;
+        }
+        .table-header {
+            padding: 20px 30px;
+            border-bottom: 1px solid #f1f3f4;
+        }
+        .table-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin: 0;
+        }
+        .table-subtitle {
+            font-size: 13px;
+            color: #7f8c8d;
+            margin-top: 2px;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .data-table th {
+            background: #fafbfc;
+            padding: 12px 30px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: #495057;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid #f1f3f4;
+        }
+        .data-table td {
+            padding: 12px 30px;
+            font-size: 14px;
+            color: #2c3e50;
+            border-bottom: 1px solid #f1f3f4;
+        }
+        .data-table tr:hover {
+            background: #f8f9fa;
+        }
+        .rank-number {
+            font-weight: 600;
+            color: #ff6b35;
+        }
+        .item-name {
+            font-weight: 500;
+        }
+        .quantity-sold {
+            font-weight: 600;
+            color: #27ae60;
+        }
+
+        /* Peak Hours Grid */
+        .peak-hours-section {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f1f3f4;
+            margin-bottom: 30px;
+        }
+        .peak-hours-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 4px;
+        }
+        .peak-hours-subtitle {
+            font-size: 13px;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+        .hours-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 8px;
+        }
+        .hour-item {
+            text-align: center;
+            padding: 12px 8px;
+            border-radius: 8px;
+            background: #fafbfc;
+            border: 1px solid #f1f3f4;
+        }
+        .hour-item.peak {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+            border-color: #ff6b35;
+        }
+        .hour-time {
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        .hour-count {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        /* Summary Section */
+        .summary-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .summary-card {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f1f3f4;
+        }
+        .summary-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 16px;
+        }
+        .metric-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #f1f3f4;
+        }
+        .metric-item:last-child {
+            border-bottom: none;
+        }
+        .metric-label {
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+        .metric-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .btn {
+            padding: 8px 14px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #6c757d;
+            border: 2px solid #e9ecef;
+        }
+
+        .btn-secondary:hover {
+            background: #e9ecef;
+            color: #495057;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.show {
+            display: block;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background-color: white;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            padding: 30px;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .modal.show .modal-content {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin: 0;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #6c757d;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .close-modal:hover {
+            color: #495057;
+            background: #f8f9fa;
+        }
+
+        .date-range-group {
+            margin-bottom: 20px;
+        }
+
+        .date-range-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #495057;
+            margin-bottom: 8px;
+        }
+
+        .date-range-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .date-range-group input:focus {
+            outline: none;
+            border-color: #ff6b35;
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+        }
+
+        .date-range-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .btn-cancel {
+            background: #6c757d;
+            color: white;
+            padding: 10px 20px;
+        }
+
+        .btn-cancel:hover {
+            background: #5a6268;
+        }
+
+        .btn-apply {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+            padding: 10px 20px;
+        }
+
+        .btn-apply:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+        }
+
+        /* Notification Styles */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            z-index: 10001;
+            transform: translateX(400px);
+            transition: all 0.3s ease;
+            border-left: 4px solid #007bff;
+            min-width: 300px;
+            max-width: 400px;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification-success {
+            border-left-color: #28a745;
+        }
+
+        .notification-warning {
+            border-left-color: #ffc107;
+        }
+
+        .notification-error {
+            border-left-color: #dc3545;
+        }
+
+        .notification-info {
+            border-left-color: #007bff;
+        }
+
+        .notification-content {
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .notification-content i {
+            color: #007bff;
+            font-size: 16px;
+        }
+
+        .notification-success .notification-content i {
+            color: #28a745;
+        }
+
+        .notification-warning .notification-content i {
+            color: #ffc107;
+        }
+
+        .notification-error .notification-content i {
+            color: #dc3545;
+        }
+
+        .notification-info .notification-content i {
+            color: #007bff;
+        }
+
+        .notification-content span {
+            font-size: 14px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        select.stats-filter option.custom-label-option {
+            display: none !important;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <i class="fas fa-utensils"></i>
+            </div>
+            <h2>Golden Spoon</h2>
+            <p class="sidebar-subtitle">Management System</p>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="menu-link active">
+                <i class="fas fa-chart-pie"></i>
+                <span>Dashboard</span>
+            </a>
+            
+            <a href="orders_management.html" class="menu-link">
+                <i class="fas fa-clipboard-list"></i>
+                <span>Orders Management</span>
+            </a>
+
+            <a href="menu_management.html" class="menu-link">
+                <i class="fas fa-book-open"></i>
+                <span>Menu Management</span>
+            </a>
+
+            <a href="menu_list.html" class="menu-link">
+                <i class="fas fa-desktop"></i>
+                <span>User Interface</span>
+            </a>
+
+            <a href="index.html" class="menu-link">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <!-- Header -->
+        <div class="dashboard-header">
+            <h1 class="page-title">
+                <i class="fas fa-chart-pie"></i>
+                Dashboard & Analytics
+            </h1>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <span style="color: #6c757d; font-size: 14px;">Last updated: <span id="lastUpdated">--:--</span></span>
+                <button class="btn btn-secondary" onclick="refreshData()">
+                    <i class="fas fa-sync-alt"></i>
+                    Refresh
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="stats-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <div>
+                    <div class="stats-title">Performance Overview</div>
+                    <div class="stats-subtitle">Key business metrics for selected period</div>
+                </div>
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    <select id="statsPeriod" class="stats-filter" onchange="updateData('stats')">
+                        <option value="today">Today</option>
+                        <option value="yesterday">Yesterday</option>
+                        <option value="last7">Last 7 Days</option>
+                        <option value="thisMonth">This Month</option>
+                        <option value="lastMonth">Last Month</option>
+                        <option value="custom">Custom Range</option>
+                                    </select>
+                                    <span id="statsPeriodLabel" style="margin-left:8px;color:#495057;font-size:13px;display:none;"></span>
+                    <select id="statsBranch" class="stats-filter" onchange="updateData('stats')">
+                        <option value="all">All Branches</option>
+                        <option value="branch1">Branch A</option>
+                        <option value="branch2">Branch B</option>
+                        <option value="branch3">Branch C</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-label">
+                        <i class="fas fa-shopping-cart stat-icon orders"></i>
+                        Total Orders
+                    </div>
+                    <div class="stat-value" id="totalOrders">85</div>
+                    <div class="stat-change positive" id="ordersChange">+12% from yesterday</div>
+                </div>
+
+                <div class="stat-item">
+                    <div class="stat-label">
+                        <i class="fas fa-baht-sign stat-icon revenue"></i>
+                        Total Revenue
+                    </div>
+                    <div class="stat-value" id="totalRevenue">฿12,450</div>
+                    <div class="stat-change positive" id="revenueChange">+8% from yesterday</div>
+                </div>
+
+                <div class="stat-item">
+                    <div class="stat-label">
+                        <i class="fas fa-clock stat-icon time"></i>
+                        Avg. Prep Time
+                    </div>
+                    <div class="stat-value" id="avgPrepTime">15:30</div>
+                    <div class="stat-change negative" id="timeChange">+2 min from yesterday</div>
+                </div>
+
+                <div class="stat-item">
+                    <div class="stat-label">
+                        <i class="fas fa-users stat-icon customers"></i>
+                        Customers Served
+                    </div>
+                    <div class="stat-value" id="customersServed">68</div>
+                    <div class="stat-change positive" id="customersChange">+15% from yesterday</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-section">
+            <div class="chart-container">
+                <div class="chart-header">
+                    <div>
+                        <div class="chart-title">Revenue Trend</div>
+                        <div class="chart-subtitle">Hourly breakdown for selected period</div>
+                    </div>
+                    <select id="revenueChartPeriod" class="stats-filter" onchange="updateData('revenueChart')">
+                        <option value="today">Today</option>
+                        <option value="yesterday">Yesterday</option>
+                        <option value="last7">Last 7 Days</option>
+                        <option value="thisMonth">This Month</option>
+                        <option value="lastMonth">Last Month</option>
+                        <option value="custom">Custom Range</option>
+                    </select>
+                </div>
+                <div class="chart-content">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-header">
+                    <div>
+                        <div class="chart-title">Category Performance</div>
+                        <div class="chart-subtitle">By revenue contribution</div>
+                    </div>
+                    <select id="categoryChartPeriod" class="stats-filter" onchange="updateData('categoryChart')">
+                        <option value="today">Today</option>
+                        <option value="yesterday">Yesterday</option>
+                        <option value="last7">Last 7 Days</option>
+                        <option value="thisMonth">This Month</option>
+                        <option value="lastMonth">Last Month</option>
+                        <option value="custom">Custom Range</option>
+                    </select>
+                </div>
+                <div class="chart-content">
+                    <canvas id="categoryChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Peak Hours Analysis -->
+        <div class="peak-hours-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <div>
+                    <div class="peak-hours-title">Peak Hours Analysis</div>
+                    <div class="peak-hours-subtitle">Order volume by hour - darker indicates higher volume</div>
+                </div>
+                <select id="peakHoursPeriod" class="stats-filter" onchange="updateData('peakHours')">
+                    <option value="today">Today</option>
+                    <option value="yesterday">Yesterday</option>
+                    <option value="last7">Last 7 Days</option>
+                    <option value="thisMonth">This Month</option>
+                    <option value="lastMonth">Last Month</option>
+                    <option value="custom">Custom Range</option>
+                </select>
+            </div>
+            <div class="hours-grid" id="peakHoursGrid">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Tables Section -->
+        <div class="tables-section">
+            <div class="table-container">
+                <div class="table-header" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <div class="table-title">Top Selling Items</div>
+                        <div class="table-subtitle">Most popular items for selected period</div>
+                    </div>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <select id="topItemsPeriod" class="stats-filter" onchange="updateData('topItems')">
+                            <option value="today">Today</option>
+                            <option value="yesterday">Yesterday</option>
+                            <option value="last7">Last 7 Days</option>
+                            <option value="thisMonth">This Month</option>
+                            <option value="lastMonth">Last Month</option>
+                            <option value="custom">Custom Range</option>
+                        </select>
+                        <select id="topItemsCategory" class="stats-filter" onchange="updateData('topItems')">
+                            <option value="all">All Categories</option>
+                            <option value="food">Food</option>
+                            <option value="beverages">Beverages</option>
+                            <option value="desserts">Desserts</option>
+                            <option value="snacks">Snacks</option>
+                            <option value="bakery">Bakery</option>
+                        </select>
+                        <select id="topItemsMetric" class="stats-filter" onchange="updateData('topItems')">
+                            <option value="quantity">By Quantity</option>
+                            <option value="revenue">By Revenue</option>
+                        </select>
+                    </div>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Item Name</th>
+                            <th>Sold</th>
+                            <th>Revenue</th>
+                        </tr>
+                    </thead>
+                    <tbody id="topItemsTable">
+                        <!-- Will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-container">
+                <div class="table-header" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <div class="table-title">Least Selling Items</div>
+                        <div class="table-subtitle">Items that need attention</div>
+                    </div>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <select id="leastItemsPeriod" class="stats-filter" onchange="updateData('leastItems')">
+                            <option value="today">Today</option>
+                            <option value="yesterday">Yesterday</option>
+                            <option value="last7">Last 7 Days</option>
+                            <option value="thisMonth">This Month</option>
+                            <option value="lastMonth">Last Month</option>
+                            <option value="custom">Custom Range</option>
+                        </select>
+                        <select id="leastItemsCategory" class="stats-filter" onchange="updateData('leastItems')">
+                            <option value="all">All Categories</option>
+                            <option value="food">Food</option>
+                            <option value="beverages">Beverages</option>
+                            <option value="desserts">Desserts</option>
+                            <option value="snacks">Snacks</option>
+                            <option value="bakery">Bakery</option>
+                        </select>
+                        <select id="leastItemsMetric" class="stats-filter" onchange="updateData('leastItems')">
+                            <option value="quantity">By Quantity</option>
+                            <option value="revenue">By Revenue</option>
+                        </select>
+                    </div>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Item Name</th>
+                            <th>Sold</th>
+                            <th>Revenue</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leastItemsTable">
+                        <!-- Will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Summary Section -->
+        <div class="summary-section">
+            <div class="summary-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                    <div class="summary-title">Performance Summary</div>
+                    <select id="performancePeriod" class="stats-filter" onchange="updateData('performance')">
+                        <option value="today">Today</option>
+                        <option value="yesterday">Yesterday</option>
+                        <option value="last7">Last 7 Days</option>
+                        <option value="thisMonth">This Month</option>
+                        <option value="lastMonth">Last Month</option>
+                        <option value="custom">Custom Range</option>
+                    </select>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-label">Average Order Value</div>
+                    <div class="metric-value" id="avgOrderValue">฿183.09</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-label">Items per Order</div>
+                    <div class="metric-value" id="itemsPerOrder">2.4</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-label">Order Completion Rate</div>
+                    <div class="metric-value" id="completionRate">98.2%</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-label">Customer Return Rate</div>
+                    <div class="metric-value" id="returnRate">67%</div>
+                </div>
+            </div>
+
+            <div class="summary-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                    <div class="summary-title">Operations Summary</div>
+                    <select id="operationsPeriod" class="stats-filter" onchange="updateData('operations')">
+                        <option value="today">Today</option>
+                        <option value="yesterday">Yesterday</option>
+                        <option value="last7">Last 7 Days</option>
+                        <option value="thisMonth">This Month</option>
+                        <option value="lastMonth">Last Month</option>
+                        <option value="custom">Custom Range</option>
+                    </select>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-label">Kitchen Efficiency</div>
+                    <div class="metric-value" id="kitchenEfficiency">94%</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-label">Staff on Duty</div>
+                    <div class="metric-value" id="staffOnDuty">12</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-label">Peak Hour Capacity</div>
+                    <div class="metric-value" id="peakCapacity">85%</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-label">Waste Percentage</div>
+                    <div class="metric-value" id="wastePercentage">3.2%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Date Range Modal -->
+    <div id="dateRangeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Custom Date Range</h2>
+                <button class="close-modal" onclick="closeDateRangeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="date-range-row">
+                <div class="date-range-group">
+                    <label for="startDate">Start Date</label>
+                    <input type="date" id="startDate" name="startDate">
+                </div>
+                <div class="date-range-group">
+                    <label for="endDate">End Date</label>
+                    <input type="date" id="endDate" name="endDate">
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn btn-cancel" onclick="closeDateRangeModal()">Cancel</button>
+                <button class="btn btn-apply" onclick="applyDateRange()">Apply Range</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script>
+        let revenueChart, categoryChart;
+        let currentCustomRangeElement = null;
+        let previousValue = null;
+        let customRangeLabels = {};
+        let lastSelectedValues = {};
+
+        // Comprehensive sample data with different periods and categories
+        const dashboardData = {
+            today: {
+                stats: {
+                    orders: 85, revenue: 12450, prepTime: '15:30', customers: 68,
+                    ordersChange: '+12%', revenueChange: '+8%', timeChange: '+2 min', customersChange: '+15%'
+                },
+                revenueData: [
+                    {time: '9:00', revenue: 850}, {time: '10:00', revenue: 1200}, {time: '11:00', revenue: 1800},
+                    {time: '12:00', revenue: 2400}, {time: '13:00', revenue: 2200}, {time: '14:00', revenue: 1600},
+                    {time: '15:00', revenue: 1000}, {time: '16:00', revenue: 800}, {time: '17:00', revenue: 1400},
+                    {time: '18:00', revenue: 1800}, {time: '19:00', revenue: 2100}, {time: '20:00', revenue: 1500}
+                ],
+                peakHours: [
+                    {hour: '9:00', count: 5}, {hour: '10:00', count: 8}, {hour: '11:00', count: 12},
+                    {hour: '12:00', count: 18}, {hour: '13:00', count: 15}, {hour: '14:00', count: 10},
+                    {hour: '15:00', count: 6}, {hour: '16:00', count: 4}, {hour: '17:00', count: 7},
+                    {hour: '18:00', count: 12}, {hour: '19:00', count: 16}, {hour: '20:00', count: 9}
+                ],
+                performance: {
+                    avgOrderValue: 183.09, itemsPerOrder: 2.4, completionRate: 98.2, returnRate: 67
+                },
+                operations: {
+                    kitchenEfficiency: 94, staffOnDuty: 12, peakCapacity: 85, wastePercentage: 3.2
+                }
+            },
+            yesterday: {
+                stats: {
+                    orders: 76, revenue: 11520, prepTime: '14:15', customers: 59,
+                    ordersChange: '-5%', revenueChange: '-3%', timeChange: '-1 min', customersChange: '-8%'
+                },
+                revenueData: [
+                    {time: '9:00', revenue: 720}, {time: '10:00', revenue: 980}, {time: '11:00', revenue: 1650},
+                    {time: '12:00', revenue: 2200}, {time: '13:00', revenue: 2050}, {time: '14:00', revenue: 1480},
+                    {time: '15:00', revenue: 880}, {time: '16:00', revenue: 720}, {time: '17:00', revenue: 1250},
+                    {time: '18:00', revenue: 1620}, {time: '19:00', revenue: 1890}, {time: '20:00', revenue: 1350}
+                ],
+                peakHours: [
+                    {hour: '9:00', count: 4}, {hour: '10:00', count: 6}, {hour: '11:00', count: 10},
+                    {hour: '12:00', count: 15}, {hour: '13:00', count: 13}, {hour: '14:00', count: 8},
+                    {hour: '15:00', count: 5}, {hour: '16:00', count: 3}, {hour: '17:00', count: 6},
+                    {hour: '18:00', count: 10}, {hour: '19:00', count: 14}, {hour: '20:00', count: 7}
+                ],
+                performance: {
+                    avgOrderValue: 151.58, itemsPerOrder: 2.1, completionRate: 97.8, returnRate: 62
+                },
+                operations: {
+                    kitchenEfficiency: 91, staffOnDuty: 11, peakCapacity: 78, wastePercentage: 3.8
+                }
+            },
+            last7: {
+                stats: {
+                    orders: 542, revenue: 89650, prepTime: '16:45', customers: 456,
+                    ordersChange: '+18%', revenueChange: '+22%', timeChange: '+3 min', customersChange: '+25%'
+                },
+                revenueData: [
+                    {time: 'Mon', revenue: 11200}, {time: 'Tue', revenue: 12800}, {time: 'Wed', revenue: 13500},
+                    {time: 'Thu', revenue: 12900}, {time: 'Fri', revenue: 15200}, {time: 'Sat', revenue: 16800},
+                    {time: 'Sun', revenue: 7250}
+                ],
+                peakHours: [
+                    {hour: '9:00', count: 35}, {hour: '10:00', count: 48}, {hour: '11:00', count: 72},
+                    {hour: '12:00', count: 105}, {hour: '13:00', count: 95}, {hour: '14:00', count: 68},
+                    {hour: '15:00', count: 42}, {hour: '16:00', count: 38}, {hour: '17:00', count: 55},
+                    {hour: '18:00', count: 78}, {hour: '19:00', count: 92}, {hour: '20:00', count: 65}
+                ],
+                performance: {
+                    avgOrderValue: 165.42, itemsPerOrder: 2.3, completionRate: 97.5, returnRate: 64
+                },
+                operations: {
+                    kitchenEfficiency: 92, staffOnDuty: 11, peakCapacity: 82, wastePercentage: 3.5
+                }
+            },
+            thisMonth: {
+                stats: {
+                    orders: 2156, revenue: 358900, prepTime: '15:20', customers: 1823,
+                    ordersChange: '+15%', revenueChange: '+19%', timeChange: '+1 min', customersChange: '+21%'
+                },
+                revenueData: [
+                    {time: 'Week 1', revenue: 85600}, {time: 'Week 2', revenue: 92400},
+                    {time: 'Week 3', revenue: 88700}, {time: 'Week 4', revenue: 92200}
+                ],
+                peakHours: [
+                    {hour: '9:00', count: 145}, {hour: '10:00', count: 198}, {hour: '11:00', count: 285},
+                    {hour: '12:00', count: 425}, {hour: '13:00', count: 398}, {hour: '14:00', count: 275},
+                    {hour: '15:00', count: 168}, {hour: '16:00', count: 142}, {hour: '17:00', count: 225},
+                    {hour: '18:00', count: 312}, {hour: '19:00', count: 375}, {hour: '20:00', count: 268}
+                ],
+                performance: {
+                    avgOrderValue: 166.52, itemsPerOrder: 2.4, completionRate: 97.8, returnRate: 68
+                },
+                operations: {
+                    kitchenEfficiency: 93, staffOnDuty: 12, peakCapacity: 84, wastePercentage: 3.1
+                }
+            }
+        };
+
+        // Category data for different categories
+        const categoryData = {
+            all: {
+                today: [
+                    {name: 'Main Courses', value: 45, color: '#ff6b35'},
+                    {name: 'Appetizers', value: 25, color: '#3b82f6'},
+                    {name: 'Beverages', value: 20, color: '#10b981'},
+                    {name: 'Desserts', value: 10, color: '#f59e0b'}
+                ],
+                yesterday: [
+                    {name: 'Main Courses', value: 48, color: '#ff6b35'},
+                    {name: 'Appetizers', value: 22, color: '#3b82f6'},
+                    {name: 'Beverages', value: 18, color: '#10b981'},
+                    {name: 'Desserts', value: 12, color: '#f59e0b'}
+                ],
+                last7: [
+                    {name: 'Main Courses', value: 42, color: '#ff6b35'},
+                    {name: 'Appetizers', value: 28, color: '#3b82f6'},
+                    {name: 'Beverages', value: 22, color: '#10b981'},
+                    {name: 'Desserts', value: 8, color: '#f59e0b'}
+                ],
+                thisMonth: [
+                    {name: 'Main Courses', value: 44, color: '#ff6b35'},
+                    {name: 'Appetizers', value: 26, color: '#3b82f6'},
+                    {name: 'Beverages', value: 21, color: '#10b981'},
+                    {name: 'Desserts', value: 9, color: '#f59e0b'}
+                ]
+            },
+            food: {
+                today: [
+                    {name: 'Thai Dishes', value: 55, color: '#ff6b35'},
+                    {name: 'Chinese Food', value: 25, color: '#3b82f6'},
+                    {name: 'Western Food', value: 15, color: '#10b981'},
+                    {name: 'Indian Curry', value: 5, color: '#f59e0b'}
+                ]
+            },
+            beverages: {
+                today: [
+                    {name: 'Thai Tea', value: 40, color: '#ff6b35'},
+                    {name: 'Fresh Juice', value: 30, color: '#3b82f6'},
+                    {name: 'Coffee', value: 20, color: '#10b981'},
+                    {name: 'Soft Drinks', value: 10, color: '#f59e0b'}
+                ]
+            }
+        };
+
+        // Item data for tables
+        const itemsData = {
+            all: {
+                today: {
+                    top: [
+                        {name: 'Pad Thai', sold: 45, revenue: 2250},
+                        {name: 'Tom Yum Soup', sold: 38, revenue: 1520},
+                        {name: 'Green Curry', sold: 32, revenue: 1920},
+                        {name: 'Fried Rice', sold: 28, revenue: 1400},
+                        {name: 'Massaman Curry', sold: 25, revenue: 1500}
+                    ],
+                    least: [
+                        {name: 'Durian Ice Cream', sold: 3, revenue: 180},
+                        {name: 'Fish Sauce Soup', sold: 5, revenue: 200},
+                        {name: 'Bitter Melon Stir-fry', sold: 7, revenue: 350},
+                        {name: 'Century Egg Salad', sold: 9, revenue: 360},
+                        {name: 'Fermented Fish Curry', sold: 11, revenue: 550}
+                    ]
+                },
+                yesterday: {
+                    top: [
+                        {name: 'Tom Yum Soup', sold: 42, revenue: 1680},
+                        {name: 'Pad Thai', sold: 38, revenue: 1900},
+                        {name: 'Massaman Curry', sold: 30, revenue: 1800},
+                        {name: 'Green Curry', sold: 28, revenue: 1680},
+                        {name: 'Thai Basil Stir-fry', sold: 24, revenue: 1200}
+                    ],
+                    least: [
+                        {name: 'Century Egg Salad', sold: 2, revenue: 80},
+                        {name: 'Durian Ice Cream', sold: 4, revenue: 240},
+                        {name: 'Fish Sauce Soup', sold: 6, revenue: 240},
+                        {name: 'Bitter Melon Stir-fry', sold: 8, revenue: 400},
+                        {name: 'Fermented Fish Curry', sold: 10, revenue: 500}
+                    ]
+                }
+            },
+            food: {
+                today: {
+                    top: [
+                        {name: 'Pad Thai', sold: 45, revenue: 2250},
+                        {name: 'Tom Yum Soup', sold: 38, revenue: 1520},
+                        {name: 'Green Curry', sold: 32, revenue: 1920},
+                        {name: 'Fried Rice', sold: 28, revenue: 1400},
+                        {name: 'Massaman Curry', sold: 25, revenue: 1500}
+                    ],
+                    least: [
+                        {name: 'Fish Sauce Soup', sold: 5, revenue: 200},
+                        {name: 'Bitter Melon Stir-fry', sold: 7, revenue: 350},
+                        {name: 'Century Egg Salad', sold: 9, revenue: 360},
+                        {name: 'Fermented Fish Curry', sold: 11, revenue: 550},
+                        {name: 'Pork Blood Soup', sold: 13, revenue: 520}
+                    ]
+                }
+            },
+            beverages: {
+                today: {
+                    top: [
+                        {name: 'Thai Iced Tea', sold: 35, revenue: 1050},
+                        {name: 'Fresh Orange Juice', sold: 28, revenue: 840},
+                        {name: 'Thai Coconut', sold: 25, revenue: 875},
+                        {name: 'Iced Coffee', sold: 22, revenue: 660},
+                        {name: 'Lemonade', sold: 18, revenue: 450}
+                    ],
+                    least: [
+                        {name: 'Butterfly Pea Tea', sold: 3, revenue: 120},
+                        {name: 'Chrysanthemum Tea', sold: 5, revenue: 150},
+                        {name: 'Longan Juice', sold: 7, revenue: 210},
+                        {name: 'Tamarind Juice', sold: 8, revenue: 200},
+                        {name: 'Roselle Tea', sold: 10, revenue: 250}
+                    ]
+                }
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // เก็บค่าเมื่อมีการเปลี่ยนแปลง select
+            const selects = [
+                'statsPeriod', 'revenueChartPeriod', 'categoryChartPeriod', 
+                'peakHoursPeriod', 'topItemsPeriod', 'leastItemsPeriod', 
+                'performancePeriod', 'operationsPeriod'
+            ];
+            
+            selects.forEach(selectId => {
+                const selectElement = document.getElementById(selectId);
+                if (selectElement) {
+                    // เก็บค่าเริ่มต้น
+                    storeCurrentSelection(selectId);
+                    
+                    // เก็บค่าเมื่อ focus (ก่อนเปลี่ยน)
+                    selectElement.addEventListener('focus', function() {
+                        if (this.value !== 'custom' && this.value !== 'custom-label') {
+                            storeCurrentSelection(selectId);
+                        }
+                    });
+                }
+            });
+
+            initializeCharts();
+            updateAllData();
+            updateLastUpdated();
+            setDefaultDateRange();
+        });
+
+        function initializeCharts() {
+            initializeRevenueChart();
+            initializeCategoryChart();
+        }
+
+        function initializeRevenueChart() {
+            const ctx = document.getElementById('revenueChart').getContext('2d');
+            revenueChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Revenue (฿)',
+                        data: [],
+                        borderColor: '#ff6b35',
+                        backgroundColor: 'rgba(255, 107, 53, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: '#f1f5f9' },
+                            ticks: {
+                                callback: function(value) {
+                                    return '฿' + value.toLocaleString();
+                                }
+                            }
+                        },
+                        x: {
+                            grid: { color: '#f1f5f9' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function initializeCategoryChart() {
+            const ctx = document.getElementById('categoryChart').getContext('2d');
+            categoryChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        data: [],
+                        backgroundColor: [],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true,
+                                font: { size: 12 },
+                                generateLabels: function(chart) {
+                                    const data = chart.data;
+                                    return data.labels.map((label, index) => {
+                                        return {
+                                            text: `${label} (${data.datasets[0].data[index]}%)`,
+                                            fillStyle: data.datasets[0].backgroundColor[index],
+                                            strokeStyle: data.datasets[0].backgroundColor[index],
+                                            lineWidth: 0,
+                                            pointStyle: 'circle',
+                                            hidden: false,
+                                            index: index
+                                        };
+                                    });
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.parsed + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function setDefaultDateRange() {
+            const today = new Date();
+            const lastWeek = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+            
+            document.getElementById('startDate').value = lastWeek.toISOString().split('T')[0];
+            document.getElementById('endDate').value = today.toISOString().split('T')[0];
+        }
+
+        function updateData(section) {
+            let period, category, metric, branch;
+            switch(section) {
+                case 'stats': {
+                    const selectElement = document.getElementById('statsPeriod');
+                    period = selectElement.value;
+                    branch = document.getElementById('statsBranch').value;
+                    
+                    // เก็บค่าก่อนเปลี่ยนเป็น custom
+                    if (period === 'custom' && document.activeElement === selectElement) {
+                        currentCustomRangeElement = 'statsPeriod';
+                        previousValue = findPreviousSelection('statsPeriod');
+                        openDateRangeModal();
+                        return;
+                    }
+                    
+                    // Remove custom label if selecting different period
+                    if (period !== 'custom' && period !== 'custom-label') {
+                        removeCustomOption('statsPeriod');
+                        storeCurrentSelection('statsPeriod'); // เก็บค่าใหม่
+                    }
+                    
+                    const labelSpan = document.getElementById('statsPeriodLabel');
+                    if (period !== 'custom' && labelSpan) {
+                        labelSpan.style.display = 'none';
+                    }
+                    const actualPeriod = period === 'custom-label' ? 'today' : period;
+                    updateStatsSection(actualPeriod, branch);
+                    break;
+                }
+                    
+                case 'revenueChart':
+                    const revenueSelectElement = document.getElementById('revenueChartPeriod');
+                    period = revenueSelectElement.value;
+                    
+                    if (period === 'custom') {
+                        currentCustomRangeElement = 'revenueChartPeriod';
+                        previousValue = findPreviousSelection('revenueChartPeriod');
+                        openDateRangeModal();
+                        return;
+                    }
+                    
+                    if (period !== 'custom' && period !== 'custom-label') {
+                        removeCustomOption('revenueChartPeriod');
+                        storeCurrentSelection('revenueChartPeriod');
+                    }
+                    
+                    const actualRevenuePeriod = period === 'custom-label' ? 'today' : period;
+                    updateRevenueChart(actualRevenuePeriod);
+                    break;
+                    
+                case 'categoryChart':
+                    const categorySelectElement = document.getElementById('categoryChartPeriod');
+                    period = categorySelectElement.value;
+                    
+                    if (period === 'custom') {
+                        currentCustomRangeElement = 'categoryChartPeriod';
+                        previousValue = findPreviousSelection('categoryChartPeriod');
+                        openDateRangeModal();
+                        return;
+                    }
+                    
+                    if (period !== 'custom' && period !== 'custom-label') {
+                        removeCustomOption('categoryChartPeriod');
+                        storeCurrentSelection('categoryChartPeriod');
+                    }
+                    
+                    const actualCategoryPeriod = period === 'custom-label' ? 'today' : period;
+                    updateCategoryChart(actualCategoryPeriod);
+                    break;
+                    
+                case 'peakHours':
+                    const peakSelectElement = document.getElementById('peakHoursPeriod');
+                    period = peakSelectElement.value;
+                    
+                    if (period === 'custom') {
+                        currentCustomRangeElement = 'peakHoursPeriod';
+                        previousValue = findPreviousSelection('peakHoursPeriod');
+                        openDateRangeModal();
+                        return;
+                    }
+                    
+                    if (period !== 'custom' && period !== 'custom-label') {
+                        removeCustomOption('peakHoursPeriod');
+                        storeCurrentSelection('peakHoursPeriod');
+                    }
+                    
+                    const actualPeakPeriod = period === 'custom-label' ? 'today' : period;
+                    updatePeakHours(actualPeakPeriod);
+                    break;
+                    
+                case 'topItems':
+                    const topSelectElement = document.getElementById('topItemsPeriod');
+                    period = topSelectElement.value;
+                    category = document.getElementById('topItemsCategory').value;
+                    metric = document.getElementById('topItemsMetric').value;
+                    
+                    if (period === 'custom') {
+                        currentCustomRangeElement = 'topItemsPeriod';
+                        previousValue = findPreviousSelection('topItemsPeriod');
+                        openDateRangeModal();
+                        return;
+                    }
+                    
+                    if (period !== 'custom' && period !== 'custom-label') {
+                        removeCustomOption('topItemsPeriod');
+                        storeCurrentSelection('topItemsPeriod');
+                    }
+                    
+                    const actualTopPeriod = period === 'custom-label' ? 'today' : period;
+                    updateTopItemsTable(actualTopPeriod, category, metric);
+                    break;
+                    
+                case 'leastItems':
+                    const leastSelectElement = document.getElementById('leastItemsPeriod');
+                    period = leastSelectElement.value;
+                    category = document.getElementById('leastItemsCategory').value;
+                    metric = document.getElementById('leastItemsMetric').value;
+                    
+                    if (period === 'custom') {
+                        currentCustomRangeElement = 'leastItemsPeriod';
+                        previousValue = findPreviousSelection('leastItemsPeriod');
+                        openDateRangeModal();
+                        return;
+                    }
+                    
+                    if (period !== 'custom' && period !== 'custom-label') {
+                        removeCustomOption('leastItemsPeriod');
+                        storeCurrentSelection('leastItemsPeriod');
+                    }
+                    
+                    const actualLeastPeriod = period === 'custom-label' ? 'today' : period;
+                    updateLeastItemsTable(actualLeastPeriod, category, metric);
+                    break;
+                    
+                case 'performance':
+                    const performanceSelectElement = document.getElementById('performancePeriod');
+                    period = performanceSelectElement.value;
+                    
+                    if (period === 'custom') {
+                        currentCustomRangeElement = 'performancePeriod';
+                        previousValue = findPreviousSelection('performancePeriod');
+                        openDateRangeModal();
+                        return;
+                    }
+                    
+                    if (period !== 'custom' && period !== 'custom-label') {
+                        removeCustomOption('performancePeriod');
+                        storeCurrentSelection('performancePeriod');
+                    }
+                    
+                    const actualPerformancePeriod = period === 'custom-label' ? 'today' : period;
+                    updatePerformanceSection(actualPerformancePeriod);
+                    break;
+                    
+                case 'operations':
+                    const operationsSelectElement = document.getElementById('operationsPeriod');
+                    period = operationsSelectElement.value;
+                    
+                    if (period === 'custom') {
+                        currentCustomRangeElement = 'operationsPeriod';
+                        previousValue = findPreviousSelection('operationsPeriod');
+                        openDateRangeModal();
+                        return;
+                    }
+                    
+                    if (period !== 'custom' && period !== 'custom-label') {
+                        removeCustomOption('operationsPeriod');
+                        storeCurrentSelection('operationsPeriod');
+                    }
+                    
+                    const actualOperationsPeriod = period === 'custom-label' ? 'today' : period;
+                    updateOperationsSection(actualOperationsPeriod);
+                    break;
+            }
+            
+            updateLastUpdated();
+            showNotification('Data updated successfully!', 'success');
+        }
+
+        function updateAllData() {
+            updateStatsSection('today', 'all');
+            updateRevenueChart('today');
+            updateCategoryChart('today');
+            updatePeakHours('today');
+            updateTopItemsTable('today', 'all', 'quantity');
+            updateLeastItemsTable('today', 'all', 'quantity');
+            updatePerformanceSection('today');
+            updateOperationsSection('today');
+        }
+
+        function updateStatsSection(period, branch) {
+            const data = dashboardData[period]?.stats || dashboardData.today.stats;
+            
+            // Apply branch multiplier
+            let multiplier = 1;
+            if (branch === 'branch1') multiplier = 0.4;
+            else if (branch === 'branch2') multiplier = 0.35;
+            else if (branch === 'branch3') multiplier = 0.25;
+            
+            document.getElementById('totalOrders').textContent = Math.round(data.orders * multiplier).toLocaleString();
+            document.getElementById('totalRevenue').textContent = '฿' + Math.round(data.revenue * multiplier).toLocaleString();
+            document.getElementById('avgPrepTime').textContent = data.prepTime;
+            document.getElementById('customersServed').textContent = Math.round(data.customers * multiplier).toLocaleString();
+            
+            document.getElementById('ordersChange').textContent = data.ordersChange;
+            document.getElementById('revenueChange').textContent = data.revenueChange;
+            document.getElementById('timeChange').textContent = data.timeChange;
+            document.getElementById('customersChange').textContent = data.customersChange;
+            
+            // Update change colors
+            updateChangeColor('ordersChange', data.ordersChange);
+            updateChangeColor('revenueChange', data.revenueChange);
+            updateChangeColor('timeChange', data.timeChange);
+            updateChangeColor('customersChange', data.customersChange);
+        }
+
+        function updateChangeColor(elementId, change) {
+            const element = document.getElementById(elementId);
+            element.className = 'stat-change';
+            if (change.startsWith('+') && !change.includes('min')) {
+                element.classList.add('positive');
+            } else if (change.startsWith('-') || change.includes('+') && change.includes('min')) {
+                element.classList.add('negative');
+            }
+        }
+
+        function updateRevenueChart(period) {
+            const data = dashboardData[period]?.revenueData || dashboardData.today.revenueData;
+            
+            revenueChart.data.labels = data.map(item => item.time);
+            revenueChart.data.datasets[0].data = data.map(item => item.revenue);
+            revenueChart.update();
+        }
+
+        function updateCategoryChart(period) {
+            const data = categoryData.all[period] || categoryData.all.today;
+            
+            categoryChart.data.labels = data.map(item => item.name);
+            categoryChart.data.datasets[0].data = data.map(item => item.value);
+            categoryChart.data.datasets[0].backgroundColor = data.map(item => item.color);
+            categoryChart.update();
+        }
+
+        function updatePeakHours(period) {
+            const data = dashboardData[period]?.peakHours || dashboardData.today.peakHours;
+            const grid = document.getElementById('peakHoursGrid');
+            const maxCount = Math.max(...data.map(item => item.count));
+            
+            grid.innerHTML = data.map(item => {
+                const isPeak = item.count >= maxCount * 0.7;
+                return `
+                    <div class="hour-item ${isPeak ? 'peak' : ''}">
+                        <div class="hour-time">${item.hour}</div>
+                        <div class="hour-count">${item.count}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateTopItemsTable(period, category, metric) {
+            const data = itemsData[category]?.[period]?.top || itemsData.all.today.top;
+            const table = document.getElementById('topItemsTable');
+            
+            // Sort by metric
+            const sortedData = [...data].sort((a, b) => {
+                return metric === 'quantity' ? b.sold - a.sold : b.revenue - a.revenue;
+            });
+            
+            table.innerHTML = sortedData.map((item, index) => `
+                <tr>
+                    <td><span class="rank-number">#${index + 1}</span></td>
+                    <td><span class="item-name">${item.name}</span></td>
+                    <td><span class="quantity-sold">${item.sold}</span></td>
+                    <td>฿${item.revenue.toLocaleString()}</td>
+                </tr>
+            `).join('');
+        }
+
+        function updateLeastItemsTable(period, category, metric) {
+            const data = itemsData[category]?.[period]?.least || itemsData.all.today.least;
+            const table = document.getElementById('leastItemsTable');
+            
+            // Sort by metric (ascending for least items)
+            const sortedData = [...data].sort((a, b) => {
+                return metric === 'quantity' ? a.sold - b.sold : a.revenue - b.revenue;
+            });
+            
+            table.innerHTML = sortedData.map((item, index) => `
+                <tr>
+                    <td><span class="rank-number">#${index + 1}</span></td>
+                    <td><span class="item-name">${item.name}</span></td>
+                    <td><span class="quantity-sold">${item.sold}</span></td>
+                    <td>฿${item.revenue.toLocaleString()}</td>
+                </tr>
+            `).join('');
+        }
+
+        function updatePerformanceSection(period) {
+            const data = dashboardData[period]?.performance || dashboardData.today.performance;
+            
+            document.getElementById('avgOrderValue').textContent = '฿' + data.avgOrderValue.toFixed(2);
+            document.getElementById('itemsPerOrder').textContent = data.itemsPerOrder.toFixed(1);
+            document.getElementById('completionRate').textContent = data.completionRate.toFixed(1) + '%';
+            document.getElementById('returnRate').textContent = data.returnRate + '%';
+        }
+
+        function updateOperationsSection(period) {
+            const data = dashboardData[period]?.operations || dashboardData.today.operations;
+            
+            document.getElementById('kitchenEfficiency').textContent = data.kitchenEfficiency + '%';
+            document.getElementById('staffOnDuty').textContent = data.staffOnDuty;
+            document.getElementById('peakCapacity').textContent = data.peakCapacity + '%';
+            document.getElementById('wastePercentage').textContent = data.wastePercentage + '%';
+        }
+
+        function refreshData() {
+            // Add some variation to current data
+            addDataVariation();
+            updateAllData();
+            showNotification('Dashboard data refreshed successfully!', 'success');
+        }
+
+        function addDataVariation() {
+            // Add random variations to make refresh feel realistic
+            Object.keys(dashboardData).forEach(period => {
+                if (dashboardData[period].stats) {
+                    const stats = dashboardData[period].stats;
+                    stats.orders = Math.max(1, stats.orders + Math.floor(Math.random() * 10) - 5);
+                    stats.revenue = Math.max(100, stats.revenue + Math.floor(Math.random() * 2000) - 1000);
+                    stats.customers = Math.max(1, stats.customers + Math.floor(Math.random() * 8) - 4);
+                }
+                
+                if (dashboardData[period].revenueData) {
+                    dashboardData[period].revenueData = dashboardData[period].revenueData.map(item => ({
+                        ...item,
+                        revenue: Math.max(0, item.revenue + (Math.random() * 400 - 200))
+                    }));
+                }
+                
+                if (dashboardData[period].peakHours) {
+                    dashboardData[period].peakHours = dashboardData[period].peakHours.map(item => ({
+                        ...item,
+                        count: Math.max(0, item.count + Math.floor(Math.random() * 6) - 3)
+                    }));
+                }
+            });
+        }
+
+        function updateLastUpdated() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', { 
+                hour12: false, 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+            document.getElementById('lastUpdated').textContent = timeString;
+        }
+
+        // Modal functions
+        function openDateRangeModal() {
+            const modal = document.getElementById('dateRangeModal');
+            modal.style.display = 'block';
+            setTimeout(() => {
+                modal.classList.add('show');
+            }, 10);
+        }
+
+        function closeDateRangeModal() {
+            const modal = document.getElementById('dateRangeModal');
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+            
+            // คืนค่าเดิมเมื่อ cancel
+            if (currentCustomRangeElement) {
+                const element = document.getElementById(currentCustomRangeElement);
+                const previousVal = previousValue || findPreviousSelection(currentCustomRangeElement);
+                element.value = previousVal;
+            }
+            
+            // รีเซ็ตตัวแปร
+            currentCustomRangeElement = null;
+            previousValue = null;
+        }
+
+        function applyDateRange() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            
+            if (!startDate || !endDate) {
+                showNotification('Please select both start and end dates', 'warning');
+                return;
+            }
+            
+            if (new Date(startDate) > new Date(endDate)) {
+                showNotification('Start date must be before end date', 'error');
+                return;
+            }
+            
+            const startFormatted = new Date(startDate).toLocaleDateString();
+            const endFormatted = new Date(endDate).toLocaleDateString();
+            const customLabel = `${startFormatted} - ${endFormatted}`;
+            
+            // Store custom range label
+            customRangeLabels[currentCustomRangeElement] = customLabel;
+            
+            // Add custom option and set as selected
+            addCustomOption(currentCustomRangeElement, customLabel);
+            
+            // Execute the data update without resetting dropdown
+            const tempElement = currentCustomRangeElement;
+            
+            // รีเซ็ตตัวแปรเมื่อ apply สำเร็จ
+            currentCustomRangeElement = null;
+            previousValue = null;
+            
+            // Update data based on section
+            const section = tempElement.replace('Period', '').replace('ChartPeriod', 'Chart');
+            if (section === 'stats') {
+                const branch = document.getElementById('statsBranch').value;
+                updateStatsSection('today', branch); // Use today's data for demo
+            } else if (section === 'revenueChart') {
+                updateRevenueChart('today');
+            } else if (section === 'categoryChart') {
+                updateCategoryChart('today');
+            } else if (section === 'peakHours') {
+                updatePeakHours('today');
+            } else if (section === 'topItems') {
+                const category = document.getElementById('topItemsCategory').value;
+                const metric = document.getElementById('topItemsMetric').value;
+                updateTopItemsTable('today', category, metric);
+            } else if (section === 'leastItems') {
+                const category = document.getElementById('leastItemsCategory').value;
+                const metric = document.getElementById('leastItemsMetric').value;
+                updateLeastItemsTable('today', category, metric);
+            } else if (section === 'performance') {
+                updatePerformanceSection('today');
+            } else if (section === 'operations') {
+                updateOperationsSection('today');
+            }
+            
+            // ปิด modal โดยไม่คืนค่า (เพราะ apply สำเร็จแล้ว)
+            const modal = document.getElementById('dateRangeModal');
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+            
+            updateLastUpdated();
+            showNotification(`Data updated for ${customLabel}`, 'success');
+        }
+
+        function updateCustomDropdownOption(elementId, customLabel) {
+            // Do not change the text of the custom option, always keep as 'Custom Range'
+            // If you want to show the selected range, display it outside the select instead
+            // (No-op here)
+        }
+        
+        function getPreviousSelectedValue(selectId) {
+            const select = document.getElementById(selectId);
+            const options = select.options;
+            
+            // หาตัวเลือกที่ selected และไม่ใช่ 'custom'
+            for (let i = 0; i < options.length; i++) {
+                if (options[i].selected && options[i].value !== 'custom') {
+                    return options[i].value;
+                }
+            }
+            
+            // ถ้าไม่เจอ ให้คืนค่า 'today'
+            return 'today';
+        }
+
+        // ฟังก์ชันเก็บค่าที่เลือกปัจจุบัน
+        function storeCurrentSelection(selectId) {
+            const select = document.getElementById(selectId);
+            if (select && select.value !== 'custom' && select.value !== 'custom-label') {
+                lastSelectedValues[selectId] = select.value;
+            }
+        }
+
+        // ฟังก์ชันหาค่าที่เลือกก่อนหน้า
+        function findPreviousSelection(selectId) {
+            // ถ้ามีค่าที่เก็บไว้ล่าสุด ให้ใช้ค่านั้น
+            if (lastSelectedValues[selectId]) {
+                return lastSelectedValues[selectId];
+            }
+            
+            // ถ้าไม่มี ให้ใช้ today เป็นค่า default
+            return 'today';
+        }
+
+        function addCustomOption(selectId, customLabel) {
+            const select = document.getElementById(selectId);
+            
+            // Remove any existing custom label option
+            removeCustomOption(selectId);
+            
+            // Create new custom option
+            const customOption = document.createElement('option');
+            customOption.value = 'custom-label';
+            customOption.textContent = customLabel;
+            customOption.className = 'custom-label-option';
+            customOption.selected = true;
+            
+            // Insert after the "Custom Range" option
+            const customRangeOption = select.querySelector('option[value="custom"]');
+            if (customRangeOption) {
+                customRangeOption.insertAdjacentElement('afterend', customOption);
+            } else {
+                select.appendChild(customOption);
+            }
+        }
+
+        function removeCustomOption(selectId) {
+            const select = document.getElementById(selectId);
+            const existingCustomOption = select.querySelector('.custom-label-option');
+            if (existingCustomOption) {
+                existingCustomOption.remove();
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            
+            const iconMap = {
+                success: 'check',
+                warning: 'exclamation-triangle',
+                error: 'times',
+                info: 'info'
+            };
+            
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <i class="fas fa-${iconMap[type]}"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.remove();
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('dateRangeModal');
+            if (event.target === modal) {
+                closeDateRangeModal();
+            }
+        }
+
+        // Close modal with ESC key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeDateRangeModal();
+            }
+        });
+
+        // Make charts responsive after zoom/resize
+        window.addEventListener("resize", () => {
+            if (typeof categoryChart !== "undefined") {
+                setTimeout(() => {
+                    categoryChart.resize();
+                    categoryChart.update();
+                }, 300);
+            }
+        });
+    </script>
+</body>
+</html>

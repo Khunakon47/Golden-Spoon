@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Detail - Golden Spoon</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+    color: #212529;
+    line-height: 1.6;
+    transition: all 0.3s ease;
+}
+
+[data-theme="dark"] body {
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+    padding: 15px 20px;
+    z-index: 1000;
+    box-shadow: 0 4px 20px rgba(255, 107, 107, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.header-content {
+    max-width: 480px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.back-btn {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.back-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    transform: scale(0);
+    transition: transform 0.3s ease;
+}
+
+.back-btn:hover::before {
+    transform: scale(1);
+}
+
+.back-btn:hover {
+    background: rgba(255,255,255,0.3);
+    transform: scale(1.05);
+}
+
+.back-btn:active {
+    transform: scale(0.95);
+}
+
+.header-title {
+    color: white;
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+    flex: 1;
+    margin: 0 15px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.header-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.control-btn {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.control-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    transform: scale(0);
+    transition: transform 0.3s ease;
+}
+
+.control-btn:hover::before {
+    transform: scale(1);
+}
+
+.control-btn:hover {
+    background: rgba(255,255,255,0.3);
+    transform: scale(1.05);
+}
+
+.main-content {
+    margin-top: 74px;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+    background: white;
+    min-height: calc(100vh - 74px);
+    box-shadow: 0 0 30px rgba(0,0,0,0.1);
+}
+
+[data-theme="dark"] .main-content {
+    background: #2d2d2d;
+    box-shadow: 0 0 30px rgba(255,255,255,0.05);
+}
+
+.item-image {
+    width: 100%;
+    height: 320px;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+}
+
+[data-theme="dark"] .item-image {
+    background: linear-gradient(45deg, #3d3d3d, #4d4d4d);
+}
+
+.item-image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.3) 100%);
+    z-index: 1;
+}
+
+.item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.item-image:hover img {
+    transform: scale(1.05);
+}
+
+.discount-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #51cf66, #37b24d);
+    color: white;
+    padding: 10px 18px;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 2;
+    box-shadow: 0 4px 15px rgba(81, 207, 102, 0.3);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.item-details {
+    padding: 28px 24px;
+}
+
+.item-header {
+    margin-bottom: 24px;
+}
+
+.item-name {
+    font-size: 32px;
+    font-weight: 700;
+    color: #212529;
+    margin-bottom: 12px;
+    line-height: 1.2;
+    background: linear-gradient(135deg, #212529, #495057);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+[data-theme="dark"] .item-name {
+    background: linear-gradient(135deg, #ffffff, #e9ecef);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.item-price {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 16px;
+}
+
+.current-price {
+    font-size: 36px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.original-price {
+    font-size: 22px;
+    color: #adb5bd;
+    text-decoration: line-through;
+    position: relative;
+}
+
+.item-meta {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #6c757d;
+    background: #f8f9fa;
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .meta-item {
+    background: #3d3d3d;
+    border-color: #4d4d4d;
+    color: #e9ecef;
+}
+
+.meta-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.meta-item i {
+    color: #ff6b6b;
+}
+
+.item-description {
+    font-size: 16px;
+    color: #6c757d;
+    line-height: 1.7;
+    margin-bottom: 32px;
+    background: rgba(248,249,250,0.5);
+    padding: 20px;
+    border-radius: 16px;
+    border-left: 4px solid #ff6b6b;
+}
+
+[data-theme="dark"] .item-description {
+    color: #e0e0e0;
+    background: rgba(61,61,61,0.5);
+}
+
+.size-section, .notes-section {
+    margin-bottom: 32px;
+}
+
+.section-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 18px;
+    position: relative;
+    padding-left: 20px;
+}
+
+[data-theme="dark"] .section-title {
+    color: #ffffff;
+}
+
+.section-title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 24px;
+    background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+    border-radius: 2px;
+}
+
+.size-options {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.size-option {
+    border: 2px solid #e9ecef;
+    border-radius: 20px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: white;
+    position: relative;
+    overflow: hidden;
+}
+
+[data-theme="dark"] .size-option {
+    background: #3d3d3d;
+    border-color: #4d4d4d;
+}
+
+.size-option::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,107,107,0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.size-option:hover::before {
+    left: 100%;
+}
+
+.size-option:hover {
+    border-color: #ff6b6b;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.15);
+}
+
+.size-option.selected {
+    border-color: #ff6b6b;
+    background: linear-gradient(135deg, rgba(255,107,107,0.05), rgba(255,142,83,0.05));
+    box-shadow: 0 4px 20px rgba(255, 107, 107, 0.2);
+}
+
+.size-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.size-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #212529;
+}
+
+[data-theme="dark"] .size-name {
+    color: #ffffff;
+}
+
+.size-price {
+    font-size: 16px;
+    font-weight: 600;
+    color: #ff6b6b;
+}
+
+.size-description {
+    font-size: 14px;
+    color: #6c757d;
+}
+
+[data-theme="dark"] .size-description {
+    color: #e0e0e0;
+}
+
+.notes-textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 20px;
+    border: 2px solid #e9ecef;
+    border-radius: 20px;
+    font-size: 16px;
+    font-family: inherit;
+    resize: vertical;
+    background: white;
+    color: #212529;
+    outline: none;
+    transition: all 0.3s ease;
+    line-height: 1.6;
+}
+
+[data-theme="dark"] .notes-textarea {
+    background: #3d3d3d;
+    border-color: #4d4d4d;
+    color: #ffffff;
+}
+
+.notes-textarea:focus {
+    border-color: #ff6b6b;
+    box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+}
+
+.notes-textarea::placeholder {
+    color: #adb5bd;
+}
+
+.bottom-section {
+    position: sticky;
+    bottom: 0;
+    background: white;
+    padding: 12px 20px;
+    border-top: 1px solid #e9ecef;
+    box-shadow: 0 -8px 32px rgba(0,0,0,0.1);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+[data-theme="dark"] .bottom-section {
+    background: #2d2d2d;
+    border-color: #4d4d4d;
+    box-shadow: 0 -8px 32px rgba(255,255,255,0.05);
+}
+
+.quantity-section {
+    flex-shrink: 0;
+}
+
+.quantity-control {
+    display: flex;
+    align-items: center;
+    background: #f8f9fa;
+    border-radius: 25px;
+    padding: 6px;
+    gap: 10px;
+    border: 2px solid #e9ecef;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+[data-theme="dark"] .quantity-control {
+    background: #3d3d3d;
+    border-color: #4d4d4d;
+}
+
+.qty-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+}
+
+.qty-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+}
+
+.qty-btn:active {
+    transform: scale(0.95);
+}
+
+.qty-btn:disabled {
+    background: linear-gradient(135deg, #dee2e6, #ced4da);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.quantity-display {
+    font-weight: 700;
+    font-size: 18px;
+    color: #212529;
+    min-width: 25px;
+    text-align: center;
+}
+
+[data-theme="dark"] .quantity-display {
+    color: #ffffff;
+}
+
+.add-to-cart-btn {
+    flex: 1;
+    background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 14px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.add-to-cart-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.add-to-cart-btn:hover::before {
+    left: 100%;
+}
+
+.add-to-cart-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(255, 107, 107, 0.4);
+}
+
+.add-to-cart-btn:active {
+    transform: translateY(-1px);
+}
+
+.add-to-cart-btn:disabled {
+    background: linear-gradient(135deg, #dee2e6, #ced4da);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.language-switcher {
+    position: relative;
+}
+
+.language-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+    padding: 12px 0;
+    min-width: 140px;
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: all 0.3s ease;
+    z-index: 1001;
+    border: 1px solid #e9ecef;
+}
+
+[data-theme="dark"] .language-dropdown {
+    background: #2d2d2d;
+    border-color: #4d4d4d;
+    color: #ffffff;
+}
+
+.language-dropdown.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.language-option {
+    padding: 14px 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.language-option:hover {
+    background-color: #f8f9fa;
+}
+
+[data-theme="dark"] .language-option:hover {
+    background-color: #3d3d3d;
+}
+
+.language-option.active {
+    background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+    color: white;
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 74px);
+    flex-direction: column;
+    gap: 20px;
+}
+
+.loading i {
+    font-size: 36px;
+    color: #ff6b6b;
+    animation: spin 1s linear infinite;
+}
+
+.loading span {
+    font-size: 18px;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@media (max-width: 480px) {
+    .header {
+        padding: 12px 16px;
+    }
+    
+    .header-title {
+        font-size: 18px;
+    }
+    
+    .back-btn, .control-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+
+    .main-content {
+        margin-top: 66px;
+    }
+
+    .item-image {
+        height: 280px;
+    }
+
+    .item-details {
+        padding: 24px 20px;
+    }
+
+    .bottom-section {
+        padding: 14px 16px;
+        gap: 8px;
+    }
+
+    .item-name {
+        font-size: 28px;
+    }
+
+    .current-price {
+        font-size: 32px;
+    }
+    
+    .quantity-control {
+        padding: 7px;
+        gap: 8px;
+    }
+    
+    .qty-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    
+    .quantity-display {
+        font-size: 16px;
+        min-width: 20px;
+    }
+
+    .add-to-cart-btn {
+        padding: 12px 12px;
+        font-size: 15px;
+        gap: 4px;
+    }
+}
+
+@media (max-width: 360px) {
+    .item-details, .bottom-section {
+        padding: 20px 16px 6px 16px;
+    }
+    
+    .item-name {
+        font-size: 24px;
+    }
+    
+    .current-price {
+        font-size: 28px;
+    }
+}
+    </style>
+</head>
+
+<body data-theme="light">
+    <header class="header">
+        <div class="header-content">
+            <button class="back-btn" id="back-btn" onclick="goBackToMenu()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            
+            <h1 class="header-title" id="header-title">Menu Detail</h1>
+            
+            <div class="header-controls">
+                <div class="language-switcher">
+                    <button class="control-btn" id="language-btn" title="Change Language">
+                        <i class="fas fa-language"></i>
+                    </button>
+                    <div class="language-dropdown" id="language-dropdown">
+                        <div class="language-option active" data-lang="en">
+                            <i class="fas fa-globe"></i> English
+                        </div>
+                        <div class="language-option" data-lang="th">
+                            <i class="fas fa-globe"></i> ไทย
+                        </div>
+                    </div>
+                </div>
+                <button class="control-btn" id="theme-toggle" title="Toggle Dark Mode">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="loading" id="loading">
+            <i class="fas fa-spinner"></i>
+            <span data-en="Loading..." data-th="กำลังโหลด...">Loading...</span>
+        </div>
+
+        <div id="item-content" style="display: none;">
+            <div class="item-image">
+                <img id="item-img" src="" alt="">
+                <div class="discount-badge" id="discount-badge" style="display: none;"></div>
+            </div>
+
+            <div class="item-details">
+                <div class="item-header">
+                    <h2 class="item-name" id="item-name"></h2>
+                    <div class="item-price">
+                        <span class="current-price" id="current-price"></span>
+                        <span class="original-price" id="original-price" style="display: none;"></span>
+                    </div>
+                    <div class="item-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-fire"></i>
+                            <span id="item-calories"></span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-clock"></i>
+                            <span data-en="15-20 min" data-th="15-20 นาที">15-20 min</span>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="item-description" id="item-description"></p>
+
+                <div class="size-section" id="size-section">
+                    <h3 class="section-title" data-en="Size" data-th="ขนาด">Size</h3>
+                    <div class="size-options" id="size-options">
+                        <div class="size-option selected" data-size="small" data-price="0">
+                            <div class="size-header">
+                                <span class="size-name" data-en="Small" data-th="เล็ก">Small</span>
+                                <span class="size-price">+฿0</span>
+                            </div>
+                            <div class="size-description" data-en="Regular portion" data-th="ปริมาณปกติ">Regular portion</div>
+                        </div>
+                        <div class="size-option" data-size="medium" data-price="20">
+                            <div class="size-header">
+                                <span class="size-name" data-en="Medium" data-th="กลาง">Medium</span>
+                                <span class="size-price">+฿20</span>
+                            </div>
+                            <div class="size-description" data-en="25% more portion" data-th="เพิ่มปริมาณ 25%">25% more portion</div>
+                        </div>
+                        <div class="size-option" data-size="large" data-price="40">
+                            <div class="size-header">
+                                <span class="size-name" data-en="Large" data-th="ใหญ่">Large</span>
+                                <span class="size-price">+฿40</span>
+                            </div>
+                            <div class="size-description" data-en="50% more portion" data-th="เพิ่มปริมาณ 50%">50% more portion</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="notes-section">
+                    <h3 class="section-title" data-en="Note to restaurant" data-th="หมายเหตุถึงร้าน">Note to restaurant</h3>
+                    <textarea 
+                        class="notes-textarea" 
+                        id="notes-textarea" 
+                        data-en="Add your special instructions here... (e.g. extra spicy, no peanuts, etc.)"
+                        data-th="เพิ่มคำแนะนำพิเศษของคุณที่นี่... (เช่น เพิ่มความเผ็ด, ไม่ใส่ถั่ว, ฯลฯ)"
+                        placeholder="Add your special instructions here... (e.g. extra spicy, no peanuts, etc.)"></textarea>
+                </div>
+            </div>
+
+            <div class="bottom-section">
+                <div class="quantity-section">
+                    <div class="quantity-control">
+                        <button class="qty-btn" id="decrease-btn" disabled>
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <span class="quantity-display" id="quantity">1</span>
+                        <button class="qty-btn" id="increase-btn">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button class="add-to-cart-btn" id="add-to-cart-btn">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span data-en="Add to Cart" data-th="เพิ่มลงตะกร้า">Add to Cart</span>
+                    <span id="total-price">฿0</span>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Menu data (same as main page)
+        const menuData = {
+            food: [
+                {
+                    id: 2,
+                    name: "Chicken Satay",
+                    nameTh: "ไก่สะเต๊ะ",
+                    image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&h=400&fit=crop&crop=center",
+                    price: 120,
+                    description: "Grilled marinated chicken skewers served with peanut sauce and cucumber relish. Our signature dish features tender chicken pieces marinated in a blend of aromatic spices, grilled to perfection over charcoal flames.",
+                    descriptionTh: "ไก่ย่างหมักเสียบไม้ เสิร์ฟพร้อมน้ำจิ้มถั่วและอาจาด เมนูขึ้นชื่อของเราที่ใช้เนื้อไก่นุ่มหมักด้วยเครื่องเทศหอม ย่างจนสุกเหลืองทองบนกองไฟถ่าน",
+                    status: "available",
+                    calories: "280 kcal"
+                },
+                {
+                    id: 3,
+                    name: "Pad Thai",
+                    nameTh: "ผัดไทย",
+                    image: "https://images.unsplash.com/photo-1559314809-0f31657def5e?w=600&h=400&fit=crop&crop=center",
+                    price: 140,
+                    originalPrice: 180,
+                    description: "Traditional Thai stir-fried rice noodles with shrimp, tofu, bean sprouts, and crushed peanuts in tamarind sauce. A perfect balance of sweet, sour, and savory flavors that represents authentic Thai cuisine.",
+                    descriptionTh: "เส้นหมี่ผัดแบบไทยดั้งเดิม กับกุ้ง เต้าหู้ ถั่วงอก และถั่วลิสงบด ในน้ำซอสมะขามเปียก รสชาติที่ลงตัวระหว่างหวาน เปรี้ยว และเค็ม ที่เป็นตัวแทนของอาหารไทยแท้",
+                    status: "available",
+                    calories: "450 kcal",
+                    discount: "22% OFF"
+                },
+                {
+                    id: 4,
+                    name: "Green Curry with Chicken",
+                    nameTh: "แกงเขียวหวานไก่",
+                    image: "https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a?w=300&h=300&fit=crop&crop=center",
+                    price: 220,
+                    description: "Rich and creamy Thai green curry with tender chicken, eggplant, and fresh basil leaves served with jasmine rice. Made with authentic green curry paste and fresh coconut milk for an aromatic and flavorful experience.",
+                    descriptionTh: "แกงเขียวหวานข้นๆ กับเนื้อไก่นุ่ม มะเขือ และใบโหระพาสด เสิร์ฟพร้อมข้าวหอมมะลิ ปรุงด้วยพริกแกงเขียวแท้และกะทิสดใหม่ให้รสชาติหอมหวานเผ็ดร้อน",
+                    status: "available",
+                    calories: "380 kcal"
+                },
+                {
+                    id: 10,
+                    name: "Tom Yum Goong",
+                    nameTh: "ต้มยำกุ้ง",
+                    image: "https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=300&h=300&fit=crop&crop=center",
+                    price: 160,
+                    originalPrice: 200,
+                    description: "Spicy and sour Thai soup with fresh shrimp, mushrooms, lemongrass, and lime leaves. This iconic Thai soup combines the perfect balance of hot and sour flavors with aromatic herbs.",
+                    descriptionTh: "ต้มยำรสเปรี้ยวจัดจ้าน กับกุ้งสด เห็ด ตะไคร้ และใบมะกรูด ซุปไทยชื่อดังที่ผสมผสานรสเผ็ดร้อนและเปรี้ยวอย่างลงตัวกับสมุนไพรหอม",
+                    status: "available",
+                    calories: "150 kcal",
+                    discount: "20% OFF"
+                }
+            ],
+            snack: [
+                {
+                    id: 1,
+                    name: "Thai Spring Rolls",
+                    nameTh: "ปอเปี๊ยะสด",
+                    image: "https://images.unsplash.com/photo-1563379091863-d5c0b1b7b1e2?w=300&h=300&fit=crop&crop=center",
+                    price: 75,
+                    description: "Fresh vegetables and herbs wrapped in rice paper, served with sweet and sour sauce. A healthy and refreshing appetizer filled with crispy vegetables, fresh herbs, and served with our homemade dipping sauce.",
+                    descriptionTh: "ผักสดและสมุนไพรห่อด้วยแผ่นข้าว เสิร์ฟพร้อมน้ำจิ้มเปรี้ยวหวาน ของว่างเพื่อสุขภาพที่สดชื่น อัดแน่นไปด้วยผักกรอบและสมุนไพรสด พร้อมน้ำจิ้มสูตรเฉพาะของร้าน",
+                    status: "available",
+                    calories: "120 kcal"
+                },
+                {
+                    id: 9,
+                    name: "Fish Cakes",
+                    nameTh: "ทอดมันปลา",
+                    image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=300&h=300&fit=crop&crop=center",
+                    price: 60,
+                    originalPrice: 80,
+                    description: "Spicy Thai fish cakes served with cucumber relish and crushed peanuts. Made from fresh fish paste mixed with aromatic curry paste and herbs, deep-fried until golden brown.",
+                    descriptionTh: "ทอดมันปลารสจัดจ้าน เสิร์ฟพร้อมอาจาดแตงกวาและถั่วลิสงบด ทำจากเนื้อปลาสดผสมพริกแกงและสมุนไพรหอม ทอดจนเหลืองทอง",
+                    status: "available",
+                    calories: "180 kcal",
+                    discount: "25% OFF"
+                }
+            ],
+            beverage: [
+                {
+                    id: 5,
+                    name: "Thai Iced Tea",
+                    nameTh: "ชาเย็น",
+                    image: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=300&h=300&fit=crop&crop=center",
+                    price: 65,
+                    description: "Traditional orange-colored Thai tea served over ice with sweetened condensed milk and evaporated milk. A refreshing and creamy beverage that's perfect for hot weather.",
+                    descriptionTh: "ชาไทยสีส้มดั้งเดิม เสิร์ฟเย็นพร้อมนมข้นหวานและนมจืด เครื่องดื่มที่สดชื่นและครีมมี่ เหมาะสำหรับอากาศร้อน",
+                    status: "available",
+                    calories: "180 kcal"
+                },
+                {
+                    id: 6,
+                    name: "Fresh Coconut Water",
+                    nameTh: "น้ำมะพร้าวสด",
+                    image: "https://images.unsplash.com/photo-1520342868574-5fa3804e551a?w=300&h=300&fit=crop&crop=center",
+                    price: 45,
+                    description: "Natural coconut water served fresh from young green coconut, refreshing and naturally sweet. Rich in electrolytes and perfect for rehydration.",
+                    descriptionTh: "น้ำมะพร้าวธรรมชาติจากมะพร้าวอ่อน สดชื่นและหวานธรรมชาติ อุดมไปด้วยอิเล็กโทรไลต์และเหมาะสำหรับการให้น้ำ",
+                    status: "available",
+                    calories: "45 kcal"
+                },
+                {
+                    id: 11,
+                    name: "Mango Lassi",
+                    nameTh: "มะม่วงลาสซี่",
+                    image: "https://images.unsplash.com/photo-1553979459-d2229ba7433a?w=300&h=300&fit=crop&crop=center",
+                    price: 70,
+                    originalPrice: 90,
+                    description: "Creamy yogurt-based drink blended with fresh mango and a touch of cardamom. A smooth and tropical beverage that's both refreshing and satisfying.",
+                    descriptionTh: "เครื่องดื่มโยเกิร์ตครีมมี่ ผสมมะม่วงสดและลูกกระวานเล็กน้อย เครื่องดื่มเมืองร้อนที่นุ่มลื่นและสดชื่น",
+                    status: "available",
+                    calories: "220 kcal",
+                    discount: "22% OFF"
+                }
+            ],
+            dessert: [
+                {
+                    id: 7,
+                    name: "Mango Sticky Rice",
+                    nameTh: "ข้าวเหนียวมะม่วง",
+                    image: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=300&h=300&fit=crop&crop=center",
+                    price: 95,
+                    description: "Sweet coconut sticky rice served with fresh ripe mango slices and topped with coconut cream. Thailand's most beloved dessert combining the sweetness of ripe mango with aromatic coconut sticky rice.",
+                    descriptionTh: "ข้าวเหนียวหวานกะทิ เสิร์ฟพร้อมมะม่วงสุกสดและราดหน้าด้วยหัวกะทิ ขนมหวานที่คนไทยรักมากที่สุด ผสมผสานความหวานของมะม่วงสุกกับข้าวเหนียวกะทิหอมหวาน",
+                    status: "unavailable",
+                    calories: "320 kcal"
+                },
+                {
+                    id: 8,
+                    name: "Thai Coconut Ice Cream",
+                    nameTh: "ไอศกรีมกะทิ",
+                    image: "https://images.unsplash.com/photo-1501443762994-82bd5dace89a?w=300&h=300&fit=crop&crop=center",
+                    price: 80,
+                    description: "Homemade coconut ice cream served with roasted peanuts, sticky rice, and sweet corn kernels. A traditional Thai dessert that's creamy, refreshing, and full of interesting textures.",
+                    descriptionTh: "ไอศกรีมกะทิโฮมเมด เสิร์ฟพร้อมถั่วคั่ว ข้าวเหนียว และเมล็ดข้าวโพดหวาน ขนมหวานไทยดั้งเดิมที่ครีมมี่ สดชื่น และมีเนื้อสัมผัสที่น่าสนใจ",
+                    status: "available",
+                    calories: "250 kcal"
+                }
+            ]
+        };
+
+        const translations = {
+            en: {
+                loading: "Loading...",
+                menuDetail: "Menu Detail",
+                size: "Size",
+                noteToRestaurant: "Note to restaurant",
+                addToCart: "Add to Cart",
+                small: "Small",
+                medium: "Medium", 
+                large: "Large",
+                regularPortion: "Regular portion",
+                morePortionTwentyFive: "25% more portion",
+                morePortionFifty: "50% more portion",
+                fifteenTwentyMin: "15-20 min",
+                notePlaceholder: "Add your special instructions here... (e.g. extra spicy, no peanuts, etc.)"
+            },
+            th: {
+                loading: "กำลังโหลด...",
+                menuDetail: "รายละเอียดเมนู",
+                size: "ขนาด",
+                noteToRestaurant: "หมายเหตุถึงร้าน",
+                addToCart: "เพิ่มลงตะกร้า",
+                small: "เล็ก",
+                medium: "กลาง",
+                large: "ใหญ่",
+                regularPortion: "ปริมาณปกติ",
+                morePortionTwentyFive: "เพิ่มปริมาณ 25%",
+                morePortionFifty: "เพิ่มปริมาณ 50%",
+                fifteenTwentyMin: "15-20 นาที",
+                notePlaceholder: "เพิ่มคำแนะนำพิเศษของคุณที่นี่... (เช่น เพิ่มความเผ็ด, ไม่ใส่ถั่ว, ฯลฯ)"
+            }
+        };
+
+        let currentLang = 'en';
+        let currentItem = null;
+        let quantity = 1;
+        let selectedSize = 'small';
+        let basePrice = 0;
+        let cart = JSON.parse(localStorage.getItem('restaurant_cart') || '{}');
+
+        function getUrlParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        function getTableNumber() {
+            return getUrlParameter('table') || '5';
+        }
+
+        function findItemById(id) {
+            for (let category of Object.values(menuData)) {
+                const item = category.find(item => item.id === id);
+                if (item) return item;
+            }
+            return null;
+        }
+
+        function updateLanguage(lang) {
+            currentLang = lang;
+            
+            document.querySelectorAll('[data-en]').forEach(el => {
+                const key = el.getAttribute(`data-${lang}`);
+                if (key) {
+                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                        el.placeholder = key;
+                    } else {
+                        el.textContent = key;
+                    }
+                }
+            });
+
+            document.querySelectorAll('.language-option').forEach(option => {
+                option.classList.remove('active');
+                if (option.getAttribute('data-lang') === lang) {
+                    option.classList.add('active');
+                }
+            });
+
+            if (currentItem) {
+                updateItemDisplay();
+            }
+        }
+
+        function updateItemDisplay() {
+            if (!currentItem) return;
+
+            const itemName = currentLang === 'th' && currentItem.nameTh ? currentItem.nameTh : currentItem.name;
+            const itemDesc = currentLang === 'th' && currentItem.descriptionTh ? currentItem.descriptionTh : currentItem.description;
+
+            document.getElementById('header-title').textContent = itemName;
+            document.getElementById('item-name').textContent = itemName;
+            document.getElementById('item-description').textContent = itemDesc;
+            document.getElementById('item-calories').textContent = currentItem.calories;
+        }
+
+        function updatePrice() {
+            if (!currentItem) return;
+
+            const sizePrice = parseInt(document.querySelector('.size-option.selected').getAttribute('data-price'));
+            const totalPrice = (currentItem.price + sizePrice) * quantity;
+            
+            document.getElementById('total-price').textContent = `฿${totalPrice}`;
+        }
+
+        function updateQuantityDisplay() {
+            document.getElementById('quantity').textContent = quantity;
+            document.getElementById('decrease-btn').disabled = quantity <= 1;
+            updatePrice();
+        }
+
+        function loadItemDetails() {
+            const itemId = parseInt(getUrlParameter('item'));
+            if (!itemId) {
+                alert('Item not found');
+                window.location.href = 'menu_list.html';
+                return;
+            }
+
+            currentItem = findItemById(itemId);
+            if (!currentItem) {
+                alert('Item not found');
+                window.location.href = 'menu_list.html';
+                return;
+            }
+
+            basePrice = currentItem.price;
+
+            // Update UI
+            const imgElement = document.getElementById('item-img');
+            imgElement.src = currentItem.image;
+            imgElement.alt = currentItem.name;
+            imgElement.onerror = function() {
+                this.src = 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=300&h=300&fit=crop&crop=center';
+            };
+            
+            if (currentItem.originalPrice) {
+                document.getElementById('current-price').textContent = `฿${currentItem.price}`;
+                document.getElementById('original-price').textContent = `฿${currentItem.originalPrice}`;
+                document.getElementById('original-price').style.display = 'inline';
+                document.getElementById('discount-badge').textContent = currentItem.discount;
+                document.getElementById('discount-badge').style.display = 'block';
+            } else {
+                document.getElementById('current-price').textContent = `฿${currentItem.price}`;
+            }
+
+            if (currentItem.status === 'unavailable') {
+                document.getElementById('add-to-cart-btn').disabled = true;
+                document.getElementById('add-to-cart-btn').innerHTML = '<i class="fas fa-ban"></i><span>Out of Stock</span>';
+            }
+
+            updateItemDisplay();
+            updatePrice();
+            
+            // Update placeholder after content is loaded
+            const textarea = document.getElementById('notes-textarea');
+            const key = textarea.getAttribute(`data-${currentLang}`);
+            if (key) {
+                textarea.placeholder = key;
+            }
+
+            // Show content
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('item-content').style.display = 'block';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize language first
+            updateLanguage(currentLang);
+
+            // Load item details
+            setTimeout(() => {
+                loadItemDetails();
+            }, 800);
+
+            // Size selection
+            document.querySelectorAll('.size-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.size-option').forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedSize = this.getAttribute('data-size');
+                    updatePrice();
+                });
+            });
+
+            // Quantity controls
+            document.getElementById('increase-btn').addEventListener('click', function() {
+                quantity++;
+                updateQuantityDisplay();
+            });
+
+            document.getElementById('decrease-btn').addEventListener('click', function() {
+                if (quantity > 1) {
+                    quantity--;
+                    updateQuantityDisplay();
+                }
+            });
+
+            // Add to cart
+           document.getElementById('add-to-cart-btn').addEventListener('click', function() {
+                if (currentItem.status === 'unavailable') return;
+
+                const notes = document.getElementById('notes-textarea').value.trim();
+                const sizePrice = parseInt(document.querySelector('.size-option.selected').getAttribute('data-price'));
+                
+                // Add to cart with proper ID handling
+                if (!cart[currentItem.id]) cart[currentItem.id] = 0;
+                cart[currentItem.id]++;
+                
+                // เพิ่มส่วนนี้ - เซฟ notes
+                let itemNotes = JSON.parse(localStorage.getItem('item_notes') || '{}');
+                if (notes) {
+                    itemNotes[currentItem.id] = notes;
+                    localStorage.setItem('item_notes', JSON.stringify(itemNotes));
+                }
+                
+                // Save to localStorage
+                localStorage.setItem('restaurant_cart', JSON.stringify(cart));
+
+                const totalPrice = (currentItem.price + sizePrice) * quantity;
+                alert(`Added ${quantity}x ${currentItem.name} (${selectedSize}) to cart for ฿${totalPrice}`);
+                
+                const tableNumber = getTableNumber();
+                window.location.href = `menu_list.html?table=${tableNumber}`;
+            });
+
+            // Language switcher
+            document.getElementById('language-btn').addEventListener('click', function(e) {
+                e.stopPropagation();
+                document.getElementById('language-dropdown').classList.toggle('show');
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.language-switcher')) {
+                    document.getElementById('language-dropdown').classList.remove('show');
+                }
+            });
+
+            document.querySelectorAll('.language-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const lang = this.getAttribute('data-lang');
+                    updateLanguage(lang);
+                    document.getElementById('language-dropdown').classList.remove('show');
+                });
+            });
+
+            // Theme toggle
+            document.getElementById('theme-toggle').addEventListener('click', function() {
+                const body = document.body;
+                const icon = this.querySelector('i');
+                
+                if (body.getAttribute('data-theme') === 'light') {
+                    body.setAttribute('data-theme', 'dark');
+                    icon.className = 'fas fa-sun';
+                } else {
+                    body.setAttribute('data-theme', 'light');
+                    icon.className = 'fas fa-moon';
+                }
+            });
+        });
+
+        function goBackToMenu() {
+            const tableNumber = getTableNumber();
+            window.location.href = `menu_list.html?table=${tableNumber}`;
+        }
+    </script>
+</body>
+</html>

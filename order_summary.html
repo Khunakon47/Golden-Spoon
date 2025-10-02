@@ -1,0 +1,1722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Summary - Golden Spoon</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background-color: #f8f9fa;
+    color: #212529;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: all 0.3s ease;
+}
+
+[data-theme="dark"] body {
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
+
+/* Header Styles */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+    padding: 16px 24px;
+    z-index: 1000;
+    box-shadow: 0 4px 20px rgba(255, 107, 107, 0.25);
+    backdrop-filter: blur(10px);
+}
+
+.header-content {
+    max-width: 520px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.back-btn, .control-btn {
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: white;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.back-btn::before, .control-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    transform: scale(0);
+    transition: transform 0.3s ease;
+}
+
+.back-btn:hover::before, .control-btn:hover::before {
+    transform: scale(1);
+}
+
+.back-btn:hover, .control-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: scale(1.05);
+}
+
+.header-title {
+    color: white;
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+    flex: 1;
+    margin: 0 20px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    letter-spacing: -0.025em;
+}
+
+.header-controls {
+    display: flex;
+    gap: 10px;
+}
+
+/* Main Content */
+.main-content {
+    margin-top: 76px;
+    padding: 24px;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 180px;
+}
+
+/* Cards */
+.table-info, .order-summary, .order-items {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .table-info, 
+[data-theme="dark"] .order-summary, 
+[data-theme="dark"] .order-items {
+    background: #2d2d2d;
+    border-color: #4d4d4d;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+}
+
+.table-info {
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.table-number {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #ff6b6b;
+    margin-bottom: 8px;
+}
+
+.order-time, .estimated-time {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+[data-theme="dark"] .order-time,
+[data-theme="dark"] .estimated-time {
+    color: #adb5bd;
+}
+
+.estimated-time {
+    margin-top: 8px;
+    color: #28a745;
+}
+
+[data-theme="dark"] .estimated-time {
+    color: #51cf66;
+}
+
+/* Coupon Section */
+.coupon-toggle {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e9ecef;
+    margin-bottom: 24px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .coupon-toggle {
+    background: #2d2d2d;
+    border-color: #4d4d4d;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+}
+
+.coupon-header-toggle {
+    padding: 20px 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.3s ease;
+}
+
+.coupon-header-toggle:hover {
+    background: rgba(255, 107, 107, 0.02);
+}
+
+[data-theme="dark"] .coupon-header-toggle:hover {
+    background: rgba(255, 107, 107, 0.05);
+}
+
+.coupon-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.coupon-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: #212529;
+}
+
+[data-theme="dark"] .coupon-title {
+    color: #ffffff;
+}
+
+.coupon-subtitle {
+    font-size: 13px;
+    color: #6c757d;
+    margin-top: 2px;
+}
+
+[data-theme="dark"] .coupon-subtitle {
+    color: #adb5bd;
+}
+
+.coupon-toggle-icon {
+    font-size: 16px;
+    color: #6c757d;
+    transition: transform 0.3s ease;
+}
+
+[data-theme="dark"] .coupon-toggle-icon {
+    color: #adb5bd;
+}
+
+.coupon-toggle-icon.expanded {
+    transform: rotate(180deg);
+}
+
+.coupon-content {
+    padding: 0 24px 24px 24px;
+    border-top: 1px solid #f8f9fa;
+    display: none;
+    animation: slideDown 0.3s ease;
+}
+
+[data-theme="dark"] .coupon-content {
+    border-color: #4d4d4d;
+}
+
+.coupon-content.show {
+    display: block;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.coupon-input-group {
+    display: flex;
+    gap: 12px;
+    align-items: stretch;
+    margin-bottom: 12px;
+}
+
+.coupon-input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    font-size: 14px;
+    background: white;
+    color: #212529;
+    transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .coupon-input {
+    background: #3d3d3d;
+    border-color: #4d4d4d;
+    color: #ffffff;
+}
+
+.coupon-input:focus {
+    border-color: #ff6b6b;
+    box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+    outline: none;
+}
+
+.apply-coupon-btn {
+    background: linear-gradient(135deg, #6c757d, #495057);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.apply-coupon-btn:hover {
+    background: linear-gradient(135deg, #495057, #343a40);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+}
+
+.coupon-success {
+    padding: 10px 14px;
+    background: linear-gradient(135deg, #d4edda, #c3e6cb);
+    border: 1px solid #c3e6cb;
+    border-radius: 8px;
+    color: #155724;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+[data-theme="dark"] .coupon-success {
+    background: linear-gradient(135deg, #1e3a1f, #2d5a2e);
+    border-color: #2d5a2e;
+    color: #51cf66;
+}
+
+/* Order Items */
+.order-items {
+    padding: 0;
+    margin-bottom: 24px;
+    overflow: hidden;
+}
+
+.section-title {
+    background: #f8f9fa;
+    padding: 20px 24px;
+    font-size: 17px;
+    font-weight: 600;
+    color: #212529;
+    border-bottom: 1px solid #e9ecef;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+[data-theme="dark"] .section-title {
+    background: #3d3d3d;
+    color: #ffffff;
+    border-color: #4d4d4d;
+}
+
+.order-item {
+    padding: 24px;
+    border-bottom: 1px solid #f8f9fa;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+[data-theme="dark"] .order-item {
+    border-color: #4d4d4d;
+}
+
+.order-item:last-child {
+    border-bottom: none;
+}
+
+.order-item:hover {
+    background: rgba(255, 107, 107, 0.02);
+}
+
+[data-theme="dark"] .order-item:hover {
+    background: rgba(255, 107, 107, 0.05);
+}
+
+.item-header {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+    position: relative;
+}
+
+.edit-item-btn {
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    background: rgba(255, 107, 107, 0.1);
+    border: none;
+    color: #ff6b6b;
+    padding: 6px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.edit-item-btn:hover {
+    background: rgba(255, 107, 107, 0.2);
+    transform: scale(1.05);
+}
+
+[data-theme="dark"] .edit-item-btn {
+    background: rgba(255, 107, 107, 0.15);
+    color: #ff8e53;
+}
+
+[data-theme="dark"] .edit-item-btn:hover {
+    background: rgba(255, 107, 107, 0.25);
+}
+
+.item-image {
+    width: 72px;
+    height: 72px;
+    border-radius: 16px;
+    overflow: hidden;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.3s ease;
+}
+
+.item-image:hover img {
+    transform: scale(1.05);
+}
+
+.item-main-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.item-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 4px;
+    line-height: 1.4;
+    letter-spacing: -0.025em;
+}
+
+[data-theme="dark"] .item-name {
+    color: #ffffff;
+}
+
+.item-details-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-bottom: 8px;
+}
+
+.item-price {
+    font-size: 14px;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+[data-theme="dark"] .item-price {
+    color: #adb5bd;
+}
+
+.item-size {
+    font-size: 12px;
+    color: #adb5bd;
+    font-style: italic;
+}
+
+/* Notes Section */
+.item-notes {
+    margin-bottom: 16px;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #fff8f0, #fff4e6);
+    border-radius: 12px;
+    border-left: 3px solid #ff6b6b;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+    position: relative;
+}
+
+[data-theme="dark"] .item-notes {
+    background: linear-gradient(135deg, #2a2520, #2d2418);
+}
+
+.notes-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #6c757d;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+[data-theme="dark"] .notes-label {
+    color: #adb5bd;
+}
+
+.notes-text {
+    font-size: 12px;
+    color: #495057;
+    line-height: 1.5;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+}
+
+[data-theme="dark"] .notes-text {
+    color: #ced4da;
+}
+
+/* Item Controls */
+.item-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.item-quantity {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.qty-controls {
+    display: flex;
+    align-items: center;
+    background: #f8f9fa;
+    border-radius: 24px;
+    padding: 4px;
+    gap: 8px;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="dark"] .qty-controls {
+    background: #3d3d3d;
+    border-color: #4d4d4d;
+}
+
+.qty-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: #ff6b6b;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.qty-btn:hover {
+    transform: scale(1.1);
+    background: #ff8e53;
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+}
+
+.qty-btn:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.qty-display {
+    font-weight: 600;
+    font-size: 15px;
+    min-width: 20px;
+    text-align: center;
+    color: #212529;
+}
+
+[data-theme="dark"] .qty-display {
+    color: #ffffff;
+}
+
+.item-total {
+    font-size: 17px;
+    font-weight: 700;
+    color: #ff6b6b;
+    letter-spacing: -0.025em;
+}
+
+/* Order Summary */
+.order-summary {
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #f8f9fa;
+}
+
+[data-theme="dark"] .summary-row {
+    border-color: #4d4d4d;
+}
+
+.summary-row:last-child {
+    border-bottom: none;
+    margin-top: 8px;
+    padding-top: 16px;
+    border-top: 2px solid #e9ecef;
+}
+
+[data-theme="dark"] .summary-row:last-child {
+    border-color: #4d4d4d;
+}
+
+.summary-label {
+    font-size: 15px;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+[data-theme="dark"] .summary-label {
+    color: #adb5bd;
+}
+
+.summary-value {
+    font-size: 15px;
+    font-weight: 600;
+    color: #212529;
+}
+
+[data-theme="dark"] .summary-value {
+    color: #ffffff;
+}
+
+.discount-value {
+    color: #28a745;
+}
+
+[data-theme="dark"] .discount-value {
+    color: #51cf66;
+}
+
+.total-label {
+    font-size: 18px;
+    font-weight: 700;
+    color: #212529;
+}
+
+[data-theme="dark"] .total-label {
+    color: #ffffff;
+}
+
+.total-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: #ff6b6b;
+}
+
+/* Empty Cart */
+.empty-cart {
+    text-align: center;
+    padding: 80px 24px;
+    color: #6c757d;
+}
+
+[data-theme="dark"] .empty-cart {
+    color: #adb5bd;
+}
+
+.empty-cart i {
+    font-size: 64px;
+    color: #dee2e6;
+    margin-bottom: 24px;
+}
+
+[data-theme="dark"] .empty-cart i {
+    color: #495057;
+}
+
+.empty-cart h3 {
+    font-size: 20px;
+    margin-bottom: 8px;
+    color: #adb5bd;
+    font-weight: 600;
+}
+
+[data-theme="dark"] .empty-cart h3 {
+    color: #6c757d;
+}
+
+.empty-cart p {
+    font-size: 14px;
+    color: #adb5bd;
+    margin-bottom: 24px;
+}
+
+[data-theme="dark"] .empty-cart p {
+    color: #6c757d;
+}
+
+.back-to-menu-btn {
+    background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+    color: white;
+    border: none;
+    border-radius: 28px;
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.back-to-menu-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(255, 107, 107, 0.4);
+}
+
+/* Bottom Section */
+.bottom-section {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 20px 24px;
+    border-top: 1px solid #e9ecef;
+    box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(20px);
+}
+
+[data-theme="dark"] .bottom-section {
+    background: rgba(45, 45, 45, 0.95);
+    border-color: #4d4d4d;
+}
+
+.bottom-content {
+    max-width: 520px;
+    margin: 0 auto;
+}
+
+.send-order-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #00b894, #00a085);
+    color: white;
+    border: none;
+    border-radius: 28px;
+    padding: 16px 24px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    box-shadow: 0 8px 25px rgba(0, 184, 148, 0.25);
+    position: relative;
+    overflow: hidden;
+    letter-spacing: -0.025em;
+}
+
+.send-order-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.send-order-btn:hover::before {
+    left: 100%;
+}
+
+.send-order-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(0, 184, 148, 0.4);
+}
+
+.send-order-btn:disabled {
+    background: linear-gradient(135deg, #dee2e6, #ced4da);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Language Switcher */
+.language-switcher {
+    position: relative;
+}
+
+.language-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+    padding: 8px 0;
+    min-width: 140px;
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+    transition: all 0.3s ease;
+    z-index: 1001;
+    border: 1px solid #e9ecef;
+}
+
+[data-theme="dark"] .language-dropdown {
+    background: #2d2d2d;
+    border-color: #4d4d4d;
+}
+
+.language-dropdown.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.language-option {
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.language-option:hover {
+    background-color: #f8f9fa;
+}
+
+[data-theme="dark"] .language-option:hover {
+    background-color: #3d3d3d;
+}
+
+.language-option.active {
+    background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+    color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 520px) {
+    .header {
+        padding: 12px 20px;
+    }
+
+    .main-content {
+        padding: 20px;
+        margin-top: 68px;
+        margin-bottom: 160px;
+    }
+
+    .table-info, .order-summary, .coupon-toggle {
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .order-item {
+        padding: 20px;
+    }
+
+    .item-image {
+        width: 64px;
+        height: 64px;
+    }
+
+    .item-header {
+        gap: 14px;
+    }
+
+    .bottom-section {
+        padding: 16px 20px;
+    }
+
+    .send-order-btn {
+        padding: 14px 20px;
+        font-size: 15px;
+        gap: 10px;
+    }
+
+    .empty-cart {
+        padding: 60px 20px;
+    }
+
+    .empty-cart i {
+        font-size: 56px;
+    }
+
+    .coupon-input-group {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .apply-coupon-btn {
+        align-self: stretch;
+    }
+}
+
+@media (max-width: 400px) {
+    .header {
+        padding: 10px 16px;
+    }
+
+    .header-title {
+        font-size: 18px;
+        margin: 0 16px;
+    }
+
+    .back-btn, .control-btn {
+        width: 40px;
+        height: 40px;
+    }
+
+    .main-content {
+        padding: 16px;
+        margin-top: 64px;
+    }
+
+    .table-info, .order-summary, .order-item, .coupon-toggle {
+        padding: 16px;
+    }
+
+    .item-image {
+        width: 56px;
+        height: 56px;
+    }
+
+    .qty-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+
+    .send-order-btn {
+        padding: 12px 16px;
+        font-size: 14px;
+    }
+}
+
+/* Animation for smooth interactions */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.order-item {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Print styles */
+@media print {
+    .header, .bottom-section, .edit-item-btn {
+        display: none;
+    }
+    
+    .main-content {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+}
+    </style>
+</head>
+
+<body data-theme="light">
+    <header class="header">
+        <div class="header-content">
+            <button class="back-btn" onclick="goBackToMenu()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            
+            <h1 class="header-title" data-en="Order Summary" data-th="สรุปออเดอร์">Order Summary</h1>
+            
+            <div class="header-controls">
+                <div class="language-switcher">
+                    <button class="control-btn" id="language-btn">
+                        <i class="fas fa-language"></i>
+                    </button>
+                    <div class="language-dropdown" id="language-dropdown">
+                        <div class="language-option active" data-lang="en">
+                            <i class="fas fa-globe"></i> English
+                        </div>
+                        <div class="language-option" data-lang="th">
+                            <i class="fas fa-globe"></i> ไทย
+                        </div>
+                    </div>
+                </div>
+                <button class="control-btn" id="theme-toggle" title="Toggle Dark Mode">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="table-info">
+            <div class="table-number">
+                <i class="fas fa-utensils"></i>
+                <span data-en="Table" data-th="โต๊ะ">Table</span>
+                <span id="table-number">#5</span>
+            </div>
+            <div class="order-time" id="order-time">
+                <i class="fas fa-clock"></i>
+                <span data-en="Order time:" data-th="เวลาสั่ง:">Order time:</span>
+                <span id="current-time"></span>
+            </div>
+            <div class="estimated-time">
+                <i class="fas fa-stopwatch"></i>
+                <span id="estimated-cooking-time">Est. cooking time: 15-20 min</span>
+            </div>
+        </div>
+
+        <div class="coupon-toggle" id="coupon-section">
+            <div class="coupon-header-toggle" onclick="toggleCoupon()">
+                <div class="coupon-header-left">
+                    <i class="fas fa-tag" style="color: #ff6b6b;"></i>
+                    <div>
+                        <div class="coupon-title" data-en="Have a coupon?" data-th="มีคูปองหรือไม่?">Have a coupon?</div>
+                        <div class="coupon-subtitle" data-en="Click to enter discount code" data-th="คลิกเพื่อใส่รหัสส่วนลด">Click to enter discount code</div>
+                    </div>
+                </div>
+                <i class="fas fa-chevron-down coupon-toggle-icon" id="coupon-toggle-icon"></i>
+            </div>
+            <div class="coupon-content" id="coupon-content">
+                <div class="coupon-input-group">
+                    <input type="text" class="coupon-input" id="coupon-input" data-en="Enter coupon code" data-th="ใส่รหัสคูปอง" placeholder="Enter coupon code">
+                    <button class="apply-coupon-btn" id="apply-coupon-btn">
+                        <span data-en="Apply" data-th="ใช้">Apply</span>
+                    </button>
+                </div>
+                <div class="coupon-success" id="coupon-success" style="display: none;">
+                    <i class="fas fa-check-circle"></i>
+                    <span id="coupon-success-text">Coupon applied successfully!</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="order-content">
+            <!-- Items will be loaded here -->
+        </div>
+
+        <div id="empty-cart" class="empty-cart" style="display: none;">
+            <i class="fas fa-shopping-cart"></i>
+            <h3 data-en="Your cart is empty" data-th="ตะกร้าของคุณว่างเปล่า">Your cart is empty</h3>
+            <p data-en="Add some delicious items to get started" data-th="เพิ่มเมนูอร่อยๆ เพื่อเริ่มต้น">Add some delicious items to get started</p>
+            <a href="#" class="back-to-menu-btn" onclick="goBackToMenu()">
+                <i class="fas fa-utensils"></i>
+                <span data-en="Browse Menu" data-th="เรียกดูเมนู">Browse Menu</span>
+            </a>
+        </div>
+    </main>
+
+    <div class="bottom-section" id="bottom-section" style="display: none;">
+        <div class="bottom-content">
+            <button class="send-order-btn" id="send-order-btn">
+                <i class="fas fa-paper-plane"></i>
+                <span data-en="Send Order to Kitchen" data-th="ส่งออเดอร์ไปห้องครัว">Send Order to Kitchen</span>
+                <span id="total-amount">฿0</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+    // Menu data
+    const menuData = {
+        food: [
+            {
+                id: 2,
+                name: "Chicken Satay",
+                nameTh: "ไก่สะเต๊ะ",
+                image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=300&h=300&fit=crop&crop=center",
+                price: 120,
+                description: "Grilled marinated chicken skewers served with peanut sauce and cucumber relish",
+                descriptionTh: "ไก่ย่างหมักเสียบไม้ เสิร์ฟพร้อมน้ำจิ้มถั่วและอาจาด",
+                status: "available",
+                calories: "280 kcal"
+            },
+            {
+                id: 3,
+                name: "Pad Thai",
+                nameTh: "ผัดไทย",
+                image: "https://images.unsplash.com/photo-1559314809-0f31657def5e?w=300&h=300&fit=crop&crop=center",
+                price: 140,
+                originalPrice: 180,
+                description: "Traditional Thai stir-fried rice noodles with shrimp, tofu, bean sprouts, and crushed peanuts in tamarind sauce",
+                descriptionTh: "เส้นหมี่ผัดแบบไทยดั้งเดิม กับกุ้ง เต้าหู้ ถั่วงอก และถั่วลิสงบด ในน้ำซอสมะขามเปียก",
+                status: "available",
+                calories: "450 kcal",
+                discount: "22% OFF"
+            },
+            {
+                id: 4,
+                name: "Green Curry with Chicken",
+                nameTh: "แกงเขียวหวานไก่",
+                image: "https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a?w=300&h=300&fit=crop&crop=center",
+                price: 220,
+                description: "Rich and creamy Thai green curry with tender chicken, eggplant, and fresh basil leaves served with jasmine rice",
+                descriptionTh: "แกงเขียวหวานข้นๆ กับเนื้อไก่นุ่ม มะเขือ และใบโหระพาสด เสิร์ฟพร้อมข้าวหอมมะลิ",
+                status: "available",
+                calories: "380 kcal"
+            },
+            {
+                id: 10,
+                name: "Tom Yum Goong",
+                nameTh: "ต้มยำกุ้ง",
+                image: "https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=300&h=300&fit=crop&crop=center",
+                price: 160,
+                originalPrice: 200,
+                description: "Spicy and sour Thai soup with fresh shrimp, mushrooms, lemongrass, and lime leaves",
+                descriptionTh: "ต้มยำรสเปรี้ยวจัดจ้าน กับกุ้งสด เห็ด ตะไคร้ และใบมะกรูด",
+                status: "available",
+                calories: "150 kcal",
+                discount: "20% OFF"
+            }
+        ],
+        snack: [
+            {
+                id: 1,
+                name: "Thai Spring Rolls",
+                nameTh: "ปอเปี๊ยะสด",
+                image: "https://images.unsplash.com/photo-1563379091863-d5c0b1b7b1e2?w=300&h=300&fit=crop&crop=center",
+                price: 75,
+                description: "Fresh vegetables and herbs wrapped in rice paper, served with sweet and sour sauce",
+                descriptionTh: "ผักสดและสมุนไพรห่อด้วยแผ่นข้าว เสิร์ฟพร้อมน้ำจิ้มเปรี้ยวหวาน",
+                status: "available",
+                calories: "120 kcal"
+            },
+            {
+                id: 9,
+                name: "Fish Cakes",
+                nameTh: "ทอดมันปลา",
+                image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=300&h=300&fit=crop&crop=center",
+                price: 60,
+                originalPrice: 80,
+                description: "Spicy Thai fish cakes served with cucumber relish and crushed peanuts",
+                descriptionTh: "ทอดมันปลารสจัดจ้าน เสิร์ฟพร้อมอาจาดแตงกวาและถั่วลิสงบด",
+                status: "available",
+                calories: "180 kcal",
+                discount: "25% OFF"
+            }
+        ],
+        beverage: [
+            {
+                id: 5,
+                name: "Thai Iced Tea",
+                nameTh: "ชาเย็น",
+                image: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=300&h=300&fit=crop&crop=center",
+                price: 65,
+                description: "Traditional orange-colored Thai tea served over ice with sweetened condensed milk and evaporated milk",
+                descriptionTh: "ชาไทยสีส้มดั้งเดิม เสิร์ฟเย็นพร้อมนมข้นหวานและนมจืด",
+                status: "available",
+                calories: "180 kcal"
+            },
+            {
+                id: 6,
+                name: "Fresh Coconut Water",
+                nameTh: "น้ำมะพร้าวสด",
+                image: "https://images.unsplash.com/photo-1520342868574-5fa3804e551a?w=300&h=300&fit=crop&crop=center",
+                price: 45,
+                description: "Natural coconut water served fresh from young green coconut, refreshing and naturally sweet",
+                descriptionTh: "น้ำมะพร้าวธรรมชาติจากมะพร้าวอ่อน สดชื่นและหวานธรรมชาติ",
+                status: "available",
+                calories: "45 kcal"
+            },
+            {
+                id: 11,
+                name: "Mango Lassi",
+                nameTh: "มะม่วงลาสซี่",
+                image: "https://images.unsplash.com/photo-1553979459-d2229ba7433a?w=300&h=300&fit=crop&crop=center",
+                price: 70,
+                originalPrice: 90,
+                description: "Creamy yogurt-based drink blended with fresh mango and a touch of cardamom",
+                descriptionTh: "เครื่องดื่มโยเกิร์ตครีมมี่ ผสมมะม่วงสดและลูกกระวานเล็กน้อย",
+                status: "available",
+                calories: "220 kcal",
+                discount: "22% OFF"
+            }
+        ],
+        dessert: [
+            {
+                id: 7,
+                name: "Mango Sticky Rice",
+                nameTh: "ข้าวเหนียวมะม่วง",
+                image: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=300&h=300&fit=crop&crop=center",
+                price: 95,
+                description: "Sweet coconut sticky rice served with fresh ripe mango slices and topped with coconut cream",
+                descriptionTh: "ข้าวเหนียวหวานกะทิ เสิร์ฟพร้อมมะม่วงสุกสดและราดหน้าด้วยหัวกะทิ",
+                status: "unavailable",
+                calories: "320 kcal"
+            },
+            {
+                id: 8,
+                name: "Thai Coconut Ice Cream",
+                nameTh: "ไอศกรีมกะทิ",
+                image: "https://images.unsplash.com/photo-1501443762994-82bd5dace89a?w=300&h=300&fit=crop&crop=center",
+                price: 80,
+                description: "Homemade coconut ice cream served with roasted peanuts, sticky rice, and sweet corn kernels",
+                descriptionTh: "ไอศกรีมกะทิโฮมเมด เสิร์ฟพร้อมถั่วคั่ว ข้าวเหนียว และเมล็ดข้าวโพดหวาน",
+                status: "available",
+                calories: "250 kcal"
+            }
+        ]
+    };
+
+    const translations = {
+        en: {
+            orderSummary: "Order Summary",
+            table: "Table",
+            orderTime: "Order time:",
+            yourCartEmpty: "Your cart is empty",
+            addItemsToStart: "Add some delicious items to get started",
+            browseMenu: "Browse Menu",
+            sendOrderKitchen: "Send Order to Kitchen",
+            subtotal: "Subtotal",
+            tax: "Tax (7%)",
+            discount: "Discount",
+            total: "Total",
+            items: "items",
+            orderSent: "Order Sent Successfully!",
+            orderSentDesc: "Your order has been sent to the kitchen",
+            estimatedTime: "Estimated preparation time:",
+            each: "each",
+            notes: "Notes:",
+            noNotes: "No special notes",
+            sendingOrder: "Sending Order...",
+            couponCode: "Have a coupon?",
+            couponSubtitle: "Click to enter discount code",
+            enterCouponCode: "Enter coupon code",
+            apply: "Apply",
+            couponApplied: "Coupon applied successfully!",
+            invalidCoupon: "Invalid coupon code",
+            edit: "Edit"
+        },
+        th: {
+            orderSummary: "สรุปออเดอร์",
+            table: "โต๊ะ",
+            orderTime: "เวลาสั่ง:",
+            yourCartEmpty: "ตะกร้าของคุณว่างเปล่า",
+            addItemsToStart: "เพิ่มเมนูอร่อยๆ เพื่อเริ่มต้น",
+            browseMenu: "เรียกดูเมนู",
+            sendOrderKitchen: "ส่งออเดอร์ไปห้องครัว",
+            subtotal: "รวมย่อย",
+            tax: "ภาษี (7%)",
+            discount: "ส่วนลด",
+            total: "รวมทั้งหมด",
+            items: "รายการ",
+            orderSent: "ส่งออเดอร์สำเร็จแล้ว!",
+            orderSentDesc: "ออเดอร์ของคุณได้ถูกส่งไปยังห้องครัวแล้ว",
+            estimatedTime: "เวลาการเตรียมโดยประมาณ:",
+            each: "ต่อชิ้น",
+            notes: "หมายเหตุ:",
+            noNotes: "ไม่มีหมายเหตุพิเศษ",
+            sendingOrder: "กำลังส่งออเดอร์...",
+            couponCode: "มีคูปองหรือไม่?",
+            couponSubtitle: "คลิกเพื่อใส่รหัสส่วนลด",
+            enterCouponCode: "ใส่รหัสคูปอง",
+            apply: "ใช้",
+            couponApplied: "ใช้คูปองสำเร็จแล้ว!",
+            invalidCoupon: "รหัสคูปองไม่ถูกต้อง",
+            edit: "แก้ไข"
+        }
+    };
+
+    let cart = JSON.parse(localStorage.getItem('restaurant_cart') || '{}');
+    let itemNotes = JSON.parse(localStorage.getItem('item_notes') || '{}');
+    let currentLang = 'en';
+    let appliedCoupon = null;
+
+    // Dummy coupon codes
+    const validCoupons = {
+        'SAVE20': { discount: 20, type: 'percentage' },
+        'WELCOME50': { discount: 50, type: 'fixed' },
+        'STUDENT10': { discount: 10, type: 'percentage' }
+    };
+
+    // Dummy discount data
+    const restaurantDiscount = {
+        percentage: 15,
+        name: "Weekend Special"
+    };
+
+    function getTableNumber() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('table') || '5';
+    }
+
+    function findItemById(id) {
+        for (let category of Object.values(menuData)) {
+            const item = category.find(item => item.id === id);
+            if (item) return item;
+        }
+        return null;
+    }
+
+    function calculateEstimatedTime(itemCount) {
+        const baseTime = 15;
+        const additionalTime = Math.floor(itemCount / 3) * 5;
+        const minTime = Math.min(baseTime + additionalTime, 45);
+        const maxTime = Math.min(minTime + 10, 60);
+        return `${minTime}-${maxTime}`;
+    }
+
+    function updateLanguage(lang) {
+        currentLang = lang;
+        
+        document.querySelectorAll('[data-en]').forEach(el => {
+            const key = el.getAttribute(`data-${lang}`);
+            if (key) {
+                if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                    el.placeholder = key;
+                } else {
+                    el.textContent = key;
+                }
+            }
+        });
+
+        document.querySelectorAll('.language-option').forEach(option => {
+            option.classList.remove('active');
+            if (option.getAttribute('data-lang') === lang) {
+                option.classList.add('active');
+            }
+        });
+
+        // Hide dropdown immediately after selection
+        document.getElementById('language-dropdown').classList.remove('show');
+
+        renderOrderItems();
+    }
+
+    function formatTime() {
+        const now = new Date();
+        return now.toLocaleString('th-TH', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    }
+
+    function updateQuantity(itemId, change) {
+        if (!cart[itemId]) return;
+        
+        cart[itemId] += change;
+        if (cart[itemId] <= 0) {
+            delete cart[itemId];
+            delete itemNotes[itemId];
+        }
+        
+        localStorage.setItem('restaurant_cart', JSON.stringify(cart));
+        localStorage.setItem('item_notes', JSON.stringify(itemNotes));
+        renderOrderItems();
+    }
+
+    function editItem(itemId) {
+        const tableNumber = getTableNumber();
+        window.location.href = `menu_detail.html?item=${itemId}&table=${tableNumber}`;
+    }
+
+    function toggleCoupon() {
+        const content = document.getElementById('coupon-content');
+        const icon = document.getElementById('coupon-toggle-icon');
+        
+        if (content.classList.contains('show')) {
+            content.classList.remove('show');
+            icon.classList.remove('expanded');
+        } else {
+            content.classList.add('show');
+            icon.classList.add('expanded');
+        }
+    }
+
+    function calculateTotals(subtotal) {
+        const tax = Math.round(subtotal * 0.07);
+        
+        // Restaurant discount
+        const restaurantDiscountAmount = Math.round(subtotal * (restaurantDiscount.percentage / 100));
+        
+        // Coupon discount
+        let couponDiscountAmount = 0;
+        if (appliedCoupon) {
+            if (appliedCoupon.type === 'percentage') {
+                couponDiscountAmount = Math.round(subtotal * (appliedCoupon.discount / 100));
+            } else {
+                couponDiscountAmount = appliedCoupon.discount;
+            }
+        }
+        
+        const totalDiscount = restaurantDiscountAmount + couponDiscountAmount;
+        const total = subtotal + tax - totalDiscount;
+        
+        return { 
+            subtotal, 
+            tax, 
+            restaurantDiscount: restaurantDiscountAmount,
+            couponDiscount: couponDiscountAmount,
+            totalDiscount,
+            total 
+        };
+    }
+
+    function applyCoupon() {
+        const couponCode = document.getElementById('coupon-input').value.trim().toUpperCase();
+        const couponSuccess = document.getElementById('coupon-success');
+        const couponSuccessText = document.getElementById('coupon-success-text');
+        
+        if (validCoupons[couponCode]) {
+            appliedCoupon = validCoupons[couponCode];
+            appliedCoupon.code = couponCode;
+            couponSuccessText.textContent = translations[currentLang].couponApplied || 'Coupon applied successfully!';
+            couponSuccess.style.display = 'flex';
+            document.getElementById('coupon-input').disabled = true;
+            document.getElementById('apply-coupon-btn').disabled = true;
+            renderOrderItems();
+        } else {
+            alert(translations[currentLang].invalidCoupon || 'Invalid coupon code');
+        }
+    }
+
+    function renderOrderItems() {
+        const orderContent = document.getElementById('order-content');
+        const emptyCart = document.getElementById('empty-cart');
+        const bottomSection = document.getElementById('bottom-section');
+        const couponSection = document.getElementById('coupon-section');
+
+        const cartItems = Object.keys(cart);
+        const totalItemCount = Object.values(cart).reduce((sum, qty) => sum + qty, 0);
+        
+        // Update estimated cooking time based on item count
+        const estimatedTime = calculateEstimatedTime(totalItemCount);
+        const estimatedTimeElement = document.getElementById('estimated-cooking-time');
+        estimatedTimeElement.textContent = `${translations[currentLang].estimatedTime || 'Estimated preparation time:'} ${estimatedTime} ${currentLang === 'th' ? 'นาที' : 'min'}`;
+        
+        if (cartItems.length === 0) {
+            orderContent.innerHTML = '';
+            emptyCart.style.display = 'block';
+            bottomSection.style.display = 'none';
+            couponSection.style.display = 'none';
+            return;
+        }
+
+        emptyCart.style.display = 'none';
+        bottomSection.style.display = 'block';
+        couponSection.style.display = 'block';
+
+        let subtotalAmount = 0;
+        let html = '';
+
+        html += `
+            <div class="order-items">
+                <div class="section-title">
+                    <i class="fas fa-utensils"></i>
+                    ${translations[currentLang].items || 'Items'} (${cartItems.length})
+                </div>
+        `;
+
+        cartItems.forEach(itemId => {
+            const item = findItemById(parseInt(itemId));
+            if (!item) return;
+
+            const quantity = cart[itemId];
+            const itemTotal = item.price * quantity;
+            subtotalAmount += itemTotal;
+
+            const itemName = currentLang === 'th' && item.nameTh ? item.nameTh : item.name;
+            const notes = itemNotes[itemId];
+            
+            html += `
+                <div class="order-item">
+                    <div class="item-header">
+                        <button class="edit-item-btn" onclick="editItem(${itemId})" title="${currentLang === 'th' ? 'แก้ไข' : 'Edit'}">
+                            <i class="fas fa-edit"></i>
+                            <span>${translations[currentLang].edit || 'Edit'}</span>
+                        </button>
+                        <div class="item-image">
+                            <img src="${item.image}" alt="${itemName}" onerror="this.src='https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=300&h=300&fit=crop&crop=center'">
+                        </div>
+                        <div class="item-main-info">
+                            <div class="item-name">${itemName}</div>
+                            <div class="item-details-info">
+                                <div class="item-price">฿${item.price} ${translations[currentLang].each || 'each'}</div>
+                                <div class="item-size">${currentLang === 'th' ? 'ขนาด: ปกติ' : 'Size: Regular'}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    ${notes ? `
+                        <div class="item-notes">
+                            <div class="notes-label">
+                                <i class="fas fa-sticky-note"></i>
+                                ${translations[currentLang].notes || 'Notes:'}
+                            </div>
+                            <div class="notes-text">${notes}</div>
+                        </div>
+                    ` : ''}
+
+                    <div class="item-controls">
+                        <div class="item-quantity">
+                            <div class="qty-controls">
+                                <button class="qty-btn" onclick="updateQuantity(${itemId}, -1)" ${quantity <= 1 ? 'style="background: #dc3545;"' : ''}>
+                                    <i class="fas fa-${quantity <= 1 ? 'trash' : 'minus'}"></i>
+                                </button>
+                                <span class="qty-display">${quantity}</span>
+                                <button class="qty-btn" onclick="updateQuantity(${itemId}, 1)">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="item-total">฿${itemTotal}</div>
+                    </div>
+                </div>
+            `;
+        });
+
+        html += '</div>';
+
+        // Calculate totals
+        const totals = calculateTotals(subtotalAmount);
+
+        // Order Summary
+        html += `
+            <div class="order-summary">
+                <div class="summary-row">
+                    <span class="summary-label">${translations[currentLang].subtotal || 'Subtotal'}</span>
+                    <span class="summary-value">฿${totals.subtotal}</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">${translations[currentLang].tax || 'Tax (7%)'}</span>
+                    <span class="summary-value">฿${totals.tax}</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">${translations[currentLang].discount || 'Discount'} (${restaurantDiscount.name})</span>
+                    <span class="summary-value discount-value">-฿${totals.restaurantDiscount}</span>
+                </div>
+                ${totals.couponDiscount > 0 ? `
+                <div class="summary-row">
+                    <span class="summary-label">${translations[currentLang].discount || 'Discount'} (${appliedCoupon.code})</span>
+                    <span class="summary-value discount-value">-฿${totals.couponDiscount}</span>
+                </div>
+                ` : ''}
+                <div class="summary-row">
+                    <span class="total-label">${translations[currentLang].total || 'Total'}</span>
+                    <span class="total-value">฿${totals.total}</span>
+                </div>
+            </div>
+        `;
+
+        orderContent.innerHTML = html;
+
+        // Update total in button
+        document.getElementById('total-amount').textContent = `฿${totals.total}`;
+        
+        // Update send button text
+        const sendBtn = document.getElementById('send-order-btn');
+        sendBtn.innerHTML = `
+            <i class="fas fa-paper-plane"></i>
+            <span>${translations[currentLang].sendOrderKitchen || 'Send Order to Kitchen'}</span>
+            <span>฿${totals.total}</span>
+        `;
+    }
+
+    function sendOrderToKitchen() {
+        const tableNumber = getTableNumber();
+        const sendBtn = document.getElementById('send-order-btn');
+        
+        // Show loading state
+        sendBtn.innerHTML = `
+            <i class="fas fa-spinner fa-spin"></i>
+            <span>${translations[currentLang].sendingOrder || 'Sending Order...'}</span>
+        `;
+        sendBtn.disabled = true;
+        sendBtn.style.background = 'linear-gradient(135deg, #6c757d, #495057)';
+        
+        // Calculate totals for order data
+        const subtotal = Object.keys(cart).reduce((total, itemId) => {
+            const item = findItemById(parseInt(itemId));
+            return total + (item ? item.price * cart[itemId] : 0);
+        }, 0);
+        
+        const totals = calculateTotals(subtotal);
+        
+        const orderData = {
+            table: tableNumber,
+            items: cart,
+            itemNotes: itemNotes,
+            timestamp: new Date().toISOString(),
+            totals: totals,
+            appliedCoupon: appliedCoupon
+        };
+
+        // Show loading for 2 seconds, then success
+        setTimeout(() => {
+            sendBtn.innerHTML = `
+                <i class="fas fa-check-circle"></i>
+                <span>${translations[currentLang].orderSent || 'Order Sent Successfully!'}</span>
+            `;
+            sendBtn.style.background = 'linear-gradient(135deg, #00b894, #00a085)';
+
+            // Clear cart and redirect after another 2 seconds
+            setTimeout(() => {
+                localStorage.removeItem('restaurant_cart');
+                localStorage.removeItem('item_notes');
+                cart = {};
+                itemNotes = {};
+                appliedCoupon = null;
+                
+                const totalItemCount = Object.values(cart).reduce((sum, qty) => sum + qty, 0);
+                const estimatedTime = calculateEstimatedTime(totalItemCount || 3); // Default 3 for demo
+                
+                alert(`${translations[currentLang].orderSentDesc || 'Your order has been sent to the kitchen'}\n${translations[currentLang].estimatedTime || 'Estimated preparation time:'} ${estimatedTime} ${currentLang === 'th' ? 'นาที' : 'minutes'}`);
+                goBackToMenu();
+            }, 2000);
+        }, 2000);
+
+        console.log('Order sent:', orderData);
+    }
+
+    function goBackToMenu() {
+        const tableNumber = getTableNumber();
+        window.location.href = `menu_list.html?table=${tableNumber}`;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize page
+        document.getElementById('table-number').textContent = `#${getTableNumber()}`;
+        document.getElementById('current-time').textContent = formatTime();
+
+        // Load order items
+        renderOrderItems();
+
+        // Language switcher
+        document.getElementById('language-btn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            document.getElementById('language-dropdown').classList.toggle('show');
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.language-switcher')) {
+                document.getElementById('language-dropdown').classList.remove('show');
+            }
+        });
+
+        document.querySelectorAll('.language-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const lang = this.getAttribute('data-lang');
+                updateLanguage(lang);
+            });
+        });
+
+        // Theme toggle
+        document.getElementById('theme-toggle').addEventListener('click', function() {
+            const body = document.body;
+            const icon = this.querySelector('i');
+            
+            if (body.getAttribute('data-theme') === 'light') {
+                body.setAttribute('data-theme', 'dark');
+                icon.className = 'fas fa-sun';
+            } else {
+                body.setAttribute('data-theme', 'light');
+                icon.className = 'fas fa-moon';
+            }
+        });
+
+        // Send order button
+        document.getElementById('send-order-btn').addEventListener('click', sendOrderToKitchen);
+
+        // Coupon functionality
+        document.getElementById('apply-coupon-btn').addEventListener('click', applyCoupon);
+        
+        document.getElementById('coupon-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                applyCoupon();
+            }
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Login - Golden Spoon Restaurant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- username/passsword for testing
+        EMP001 / waiter123 (Waiter)
+        EMP002 / kitchen456 (Kitchen Staff)
+        EMP003 / cashier789 (Cashier)
+        EMP004 / manager999 (Manager - สามารถเข้าได้ทุกตำแหน่ง) 
+    -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="1.5" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="80" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="90" cy="90" r="2.5" fill="rgba(255,255,255,0.1)"/><circle cx="10" cy="60" r="1.2" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+            animation: float 20s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes float {
+            0% { transform: translateX(-100px) translateY(-100px); }
+            100% { transform: translateX(100px) translateY(100px); }
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 35px;
+            width: 100%;
+            max-width: 460px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            z-index: 10;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .restaurant-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .restaurant-logo {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+            position: relative;
+        }
+
+        .restaurant-logo::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            z-index: -1;
+            filter: blur(20px);
+            opacity: 0.6;
+        }
+
+        .restaurant-name {
+            color: #2c3e50;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .staff-subtitle {
+            color: #7f8c8d;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 15px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px 20px 15px 50px;
+            border: 2px solid #e8ecef;
+            border-radius: 16px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+            color: #2c3e50;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #ff6b35;
+            box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.1);
+            background: white;
+            transform: translateY(-1px);
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #7f8c8d;
+            font-size: 18px;
+            transition: color 0.3s ease;
+        }
+
+        .form-input:focus + .input-icon {
+            color: #ff6b35;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #7f8c8d;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .password-toggle:hover {
+            color: #ff6b35;
+            background: rgba(255, 107, 53, 0.1);
+        }
+
+        .staff-role {
+            background: rgba(255, 107, 53, 0.1);
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            border-radius: 12px;
+            padding: 12px 18px;
+            margin: 10px 0;
+        }
+
+        .role-title {
+            font-weight: 600;
+            color: #ff6b35;
+            font-size: 14px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .role-options {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .role-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+
+        .role-option:hover {
+            background: rgba(255, 107, 53, 0.1);
+        }
+
+        .role-option input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #ff6b35;
+        }
+
+        .role-option label {
+            font-size: 14px;
+            color: #2c3e50;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .login-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(255, 107, 53, 0.4);
+        }
+
+        .login-button:active {
+            transform: translateY(0);
+        }
+
+        .login-button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .login-spinner {
+            display: none;
+            width: 22px;
+            height: 22px;
+            border: 2px solid transparent;
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 12px;
+        }
+
+        .login-button.loading .login-spinner {
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .help-section {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #e8ecef;
+        }
+
+        .help-text {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .help-contact {
+            color: #ff6b35;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .help-contact:hover {
+            background: rgba(255, 107, 53, 0.1);
+            transform: translateY(-1px);
+        }
+
+        /* Custom Alert */
+        .custom-alert {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            backdrop-filter: blur(4px);
+        }
+
+        .alert-box {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            max-width: 420px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
+            animation: alertPop 0.2s ease-out;
+        }
+
+        .alert-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 24px;
+        }
+
+        .alert-success .alert-icon {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+
+        .alert-error .alert-icon {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+
+        .alert-warning .alert-icon {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+
+        .alert-message {
+            font-size: 18px;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .alert-button {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 14px 30px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 100px;
+        }
+
+        .alert-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+        }
+
+        .alert-button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        @keyframes alertPop {
+            0% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @media (max-width: 520px) {
+            .login-container {
+                padding: 25px 20px;
+                margin: 15px;
+                border-radius: 20px;
+            }
+
+            .restaurant-name {
+                font-size: 24px;
+            }
+
+            .role-options {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="restaurant-header">
+            <div class="restaurant-logo">
+                <i class="fas fa-utensils"></i>
+            </div>
+            <h1 class="restaurant-name">Golden Spoon</h1>
+            <p class="staff-subtitle">Staff Portal Access</p>
+        </div>
+
+        <form id="staffLoginForm" class="login-form" novalidate>
+            <div class="input-group">
+                <label class="input-label" for="employeeId">Employee ID</label>
+                <div class="input-wrapper">
+                    <input type="text" id="employeeId" class="form-input" placeholder="Example: EMP004">
+                    <i class="fas fa-id-badge input-icon"></i>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label" for="password">Password</label>
+                <div class="input-wrapper">
+                    <input type="password" id="password" class="form-input" placeholder="Example: manager999">
+                    <i class="fas fa-lock input-icon"></i>
+                    <button type="button" class="password-toggle" onclick="togglePassword()">
+                        <i class="fas fa-eye" id="passwordIcon"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="staff-role">
+                <div class="role-title">
+                    <i class="fas fa-user-tag"></i>
+                    Select Your Role
+                </div>
+                <div class="role-options">
+                    <div class="role-option">
+                        <input type="radio" id="waiter" name="role" value="waiter" checked>
+                        <label for="waiter">Waiter</label>
+                    </div>
+                    <div class="role-option">
+                        <input type="radio" id="kitchen" name="role" value="kitchen">
+                        <label for="kitchen">Kitchen Staff</label>
+                    </div>
+                    <div class="role-option">
+                        <input type="radio" id="cashier" name="role" value="cashier">
+                        <label for="cashier">Cashier</label>
+                    </div>
+                    <div class="role-option">
+                        <input type="radio" id="manager" name="role" value="manager">
+                        <label for="manager">Manager</label>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="login-button">
+                <span class="login-spinner"></span>
+                <span class="button-text">Sign In</span>
+            </button>
+        </form>
+
+        <div class="help-section">
+            <p class="help-text">Having trouble logging in?</p>
+            <a href="#" class="help-contact" onclick="showManagerContact(event)">
+                <i class="fas fa-headset"></i>
+                Contact Manager
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Staff credentials database (in real app, this would be server-side)
+        const staffDatabase = {
+            'EMP001': { password: 'waiter123', roles: ['waiter'], name: 'John Doe' },
+            'EMP002': { password: 'kitchen456', roles: ['kitchen'], name: 'Jane Smith' },
+            'EMP003': { password: 'cashier789', roles: ['cashier'], name: 'Mike Johnson' },
+            'EMP004': { password: 'manager999', roles: ['manager', 'waiter', 'cashier'], name: 'Sarah Wilson' }
+        };
+
+        // Custom Alert Functions
+        function showAlert(message, type = 'error', callback = null) {
+            const alertOverlay = document.createElement('div');
+            alertOverlay.className = 'custom-alert';
+            
+            let iconClass = 'fas fa-exclamation-triangle';
+            if (type === 'success') iconClass = 'fas fa-check';
+            else if (type === 'error') iconClass = 'fas fa-times';
+            else if (type === 'warning') iconClass = 'fas fa-exclamation-triangle';
+            
+            alertOverlay.innerHTML = `
+                <div class="alert-box alert-${type}">
+                    <div class="alert-icon">
+                        <i class="${iconClass}"></i>
+                    </div>
+                    <div class="alert-message">${message}</div>
+                    <button class="alert-button" onclick="closeAlert(${callback ? 'true' : 'false'})">OK</button>
+                </div>
+            `;
+            document.body.appendChild(alertOverlay);
+            
+            if (callback) {
+                window.alertCallback = callback;
+            }
+        }
+
+        function closeAlert(executeCallback = false) {
+            const alertOverlay = document.querySelector('.custom-alert');
+            if (alertOverlay) {
+                alertOverlay.remove();
+                
+                if (executeCallback && window.alertCallback) {
+                    setTimeout(window.alertCallback, 50);
+                    window.alertCallback = null;
+                }
+            }
+        }
+
+        function showManagerContact(event) {
+            event.preventDefault();
+            showAlert('Please contact your manager at:<br><strong>Phone: +66-2-xxx-xxxx</strong><br><strong>Email: manager@goldenspoon.com</strong>', 'warning');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('staffLoginForm');
+            const loginButton = loginForm.querySelector('.login-button');
+            const employeeIdInput = document.getElementById('employeeId');
+            const passwordInput = document.getElementById('password');
+
+            function setLoading(isLoading) {
+                loginButton.disabled = isLoading;
+                if (isLoading) {
+                    loginButton.classList.add('loading');
+                    loginButton.querySelector('.button-text').textContent = 'Signing In...';
+                } else {
+                    loginButton.classList.remove('loading');
+                    loginButton.querySelector('.button-text').textContent = 'Sign In';
+                }
+            }
+
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const employeeId = employeeIdInput.value.trim().toUpperCase();
+                const password = passwordInput.value;
+                const selectedRole = document.querySelector('input[name="role"]:checked').value;
+
+                // Validate empty fields
+                if (!employeeId) {
+                    showAlert('Please enter your Employee ID', 'warning');
+                    employeeIdInput.focus();
+                    return;
+                }
+
+                if (!password) {
+                    showAlert('Please enter your password', 'warning');
+                    passwordInput.focus();
+                    return;
+                }
+
+                setLoading(true);
+
+                // Simulate authentication delay
+                setTimeout(() => {
+                    const staff = staffDatabase[employeeId];
+                    
+                    if (!staff) {
+                        setLoading(false);
+                        showAlert('Employee ID not found. Please check your ID or contact your manager.', 'error');
+                        employeeIdInput.focus();
+                        employeeIdInput.select();
+                        return;
+                    }
+
+                    if (staff.password !== password) {
+                        setLoading(false);
+                        showAlert('Incorrect password. Please try again.', 'error');
+                        passwordInput.focus();
+                        passwordInput.select();
+                        return;
+                    }
+
+                    if (!staff.roles.includes(selectedRole)) {
+                        setLoading(false);
+                        showAlert(`Access denied. You don't have permission for ${selectedRole} role.`, 'error');
+                        return;
+                    }
+
+                    // Successful login
+                    showAlert(`Welcome back, ${staff.name}!`, 'success', function() {
+                        // Store session data
+                        sessionStorage.setItem('staffLoggedIn', 'true');
+                        sessionStorage.setItem('employeeId', employeeId);
+                        sessionStorage.setItem('staffName', staff.name);
+                        sessionStorage.setItem('staffRole', selectedRole);
+                        sessionStorage.setItem('loginTime', new Date().toISOString());
+                        
+                        // Redirect based on role
+                        const rolePages = {
+                            'waiter': 'menu_management.html',
+                            'kitchen': 'menu_management.html',
+                            'cashier': 'menu_management.html',
+                            'manager': 'menu_management.html'
+                        };
+                        
+                        window.location.href = rolePages[selectedRole] || 'menu_management.html';
+                    });
+                }, 2000);
+            });
+
+            // Enter key navigation
+            employeeIdInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    passwordInput.focus();
+                }
+            });
+
+            passwordInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    loginForm.dispatchEvent(new Event('submit'));
+                }
+            });
+        });
+
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const passwordIcon = document.getElementById('passwordIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                passwordIcon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                passwordIcon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+    </script>
+</body>
+</html>
